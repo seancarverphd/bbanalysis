@@ -1,0 +1,27 @@
+---
+title: "Major League Markov Chains"
+author: "Sean Carver, PhD and Jake Berberian"
+date: "3/19/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+- Markov Chain model (explain)
+- interesting statistics 
+- transition probability (explain)
+- frequency of transition probabilities (bar charts in ggplot...between .01 and .1 perhaps)
+- 
+
+
+
+
+
+
+
+
+
+
+
