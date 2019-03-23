@@ -25,7 +25,6 @@ __Add Histogram__
 - Show other model + other answer
 
 
-
 A Markov chain models random processes over time, stating that the next occuring event is dependent solely upon the previous event. 
 
 
