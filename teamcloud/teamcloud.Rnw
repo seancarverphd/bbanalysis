@@ -10,29 +10,30 @@
 
   \articletype{...}
 
-  \author*[1]{...}
-  \author[2]{...}
-  \author[1]{...} 
-  \runningauthor{...}
-  \affil[1]{...}
-  \affil[2]{...}
-  \title{...}
-  \runningtitle{...}
-  \subtitle{...}
-  \abstract{...}
-  \keywords{...}
-  \classification[PACS]{...}
-  \communicated{...}
-  \dedication{...}
-  \received{...}
-  \accepted{...}
-  \journalname{...}
-  \journalyear{...}
-  \journalvolume{..}
-  \journalissue{..}
+  \author*[1]{Sean G. Carver}
+  %\author[2]{Kingsley Lawye}
+  %\author[3]{Jacob Berberian}
+  \runningauthor{Sean G. Carver et al.}
+  \affil[1]{American University}
+  %\affil[2]{American University}
+  %\affil[3]{American University}
+  \title{The consistent variability in MLB home-team offensive performance}
+  \runningtitle{The consistent variability in MLB offense}
+  %\subtitle{...}
+  \abstract{We perform a principal component analysis of single-season MLB teams' offensive performance, batting at home from 1930 to 2018.  As features, we derive maximum likelihood estimates of the transition probabilities for the standard Markov chain model of baseball.  Each team has 600 total, and possibly as many as 296 nonzero, values for these features.  We compare the ``consistency'' (or ``similarity,'' see below) of the matrices in the singular value decompostion (say $A_{2018}^T D_{2018} B_{2018}$ and $A_{2017}^T D_{2017} B_{2017}$, for two different seasons), decomposing the transformation from each team in a season to their respective transistion probabilities.  The measure of similarity of the orthgonal matrices $A_{2018}$ and $A_{2017}$ is the smallness of Frobenius norm of $(A_{2018}^T A_{2017} - I)$ (after permuting the columns of the second matrix to maximize its Frobenius inner product with the first).  Using this norm we derive an empirical distribution for simulated teams' consistency across season, with play drawn randomly from the transitions in those given seasons.  Using this empirical distribution, we perform an hypothesis test to reject the null hypothesis that variability between successive years is random.}
+  \keywords{Baseball, Markov Chain, Principal Component Analysis}
+  %\classification[PACS]{...}
+  \communicated{Sean G. Carver}
+  %\dedication{...}
+  %\received{...}
+  %\accepted{...}
+  \journalname{Journal of Quantitative Analysis in Sports}
+  %\journalyear{...}
+  %\journalvolume{..}
+  %\journalissue{..}
   \startpage{1}
   \aop
-  \DOI{...}
+  %\DOI{...}
 
 \maketitle
 
