@@ -1,7 +1,7 @@
 ---
-title: "Major League Markov Chains"
+title: "The Most Unlikely Inning in Major League Baseball History"
 author: "Sean Carver, PhD and Jake Berberian"
-date: "3/19/2019"
+date: "20 March 2019"
 output: pdf_document
 ---
 
@@ -9,11 +9,24 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-- Markov Chain model (explain)
-- interesting statistics 
-- transition probability (explain)
-- frequency of transition probabilities (bar charts in ggplot...between .01 and .1 perhaps)
-- 
+
+### Introduction
+
+- Explain what the least probably inning was, describe setting, discuss occurances in the inning and final score 
+
+
+### Models 
+
+A model is a mathematical description of what we expect from data. When discussing probability models, such as ours, it is important to define the terms "most unlikely." For the scope of the paper, it will be defined as __ add __. The probability for all recorded innings in baseball history (1930 - 2018) is shown in the histogram below. 
+
+__Add Histogram__
+
+- Then discuss "least probable" is respective to another model
+- Show other model + other answer
+
+
+
+A Markov chain models random processes over time, stating that the next occuring event is dependent solely upon the previous event. 
 
 
 
