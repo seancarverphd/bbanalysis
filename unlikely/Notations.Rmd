@@ -11,11 +11,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Notations 
 
+One of the greatest things about baseball is the ability for one to track the game. There are discrete states, as opposed to other sports (i.e. basketball) that exist in a more continuous flow. This makes baseball both incredibly nice to model, but also to play. It is one of few sports without a clock, therefore making it impossible to stall (as in other sports, such as football). The fluidity of the sport mixed with the aforementioned discrete states is what makes baseball such a beautiful game and sport to analyze. 
+
 This paper focuses on **transition probabilities**, which describe the ways a half-inning progresses through batting events. A few notes about them:
 
 - There exists eight possible combinations of runners on base (0, 1, 2, 3, 12, 13, 23, 123)
 - There exists four possible numbers of outs (*blank*, X, XX, XXX)
-- A "state" exists through any combination of outs and runners on base. There exist 600 total states. 
+- A "state" exists through any combination of outs and runners on base. There are 25 possible states, with 24 being transient and the other (three outs) being an absorbing state.  
+- A transition occurs with one starting states moving to some new state. There exist 600 total transitions. 
 - However, only 296 of these states are actually possible. For example, it is impossible to go from two outs to one out, because you cannot "lose" an out in the progression of a half-inning. 
 
 Therefore, we will notate a transition probability as this combination of runners on and outs, followed by a colon (:) to represent that the event is complete. For example, an inning where the first batter gets out, followed by a single, then a double play to end the inning would look as such: 
