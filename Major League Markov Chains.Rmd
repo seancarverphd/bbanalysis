@@ -1,7 +1,7 @@
 ---
 title: "The Most Unlikely Inning in Major League Baseball History"
 author: "Sean Carver, PhD and Jake Berberian"
-date: "20 March 2019"
+date: "26 March 2019"
 output: pdf_document
 ---
 
@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Introduction
 
-- Explain what the least probable inning was, describe setting, discuss occurances in the inning and final score 
+- Explain what the least probable inning was, describe setting, discuss occurances in the inning and final score. 
 
 
 ### Models 
