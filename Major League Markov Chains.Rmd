@@ -12,12 +12,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Introduction
 
-- Explain what the least probably inning was, describe setting, discuss occurances in the inning and final score 
+- Explain what the least probable inning was, describe setting, discuss occurances in the inning and final score 
 
 
 ### Models 
 
 A model is a mathematical description of what we expect from data. When discussing probability models, such as ours, it is important to define the terms "most unlikely." For the scope of the paper, it will be defined as __ add __. The probability for all recorded innings in baseball history (1930 - 2018) is shown in the histogram below. 
+
 
 __Add Histogram__
 
@@ -25,9 +26,8 @@ __Add Histogram__
 - Show other model + other answer
 
 
+- Define Markov chain
 A Markov chain models random processes over time, stating that the next occuring event is dependent solely upon the previous event. 
-
-
 
 
 
