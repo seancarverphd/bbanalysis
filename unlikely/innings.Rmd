@@ -1,0 +1,44 @@
+---
+title: "The most unlikely half-inning in Major League history"
+author: "Sean Carver and Jacob Berberian"
+date: "March 26, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Baseball involves an infinity of possibilities---things that have happened, frequently or infrequently, and things that have never happened, but someday may.  With a model we can compute probabilities of events in the future---even if they have never occurred in the past.
+
+Some questions struck us: what's the "shortest" half-inning that has never occurred in the major leagues?  If it has never occurred, how long can we expect to wait to see this half-inning in the future?  Of the half-innings that _have_ occurred which one has the lowest probability: _the most unlikely half-inning in Major League History_?  With a model, we can answer these questions---with substantial help from a computer and a powerful database.  We use a well-studied and often used model of baseball to get our answers.
+
+So what's the shortest inning that has never been played?  We'll give this answer now, then review the rules of baseball, explain our notation, introduce our model, answer our questions, convey some fascinating statistics and reveal some compelling visualizations.
+
+The shortest half-innings all have three plays---you need three 'at-bats' to get three outs. These and all other half-innings start with bases empty: **0**.  While the individual plays listed here have all occurred before, this exact sequence never has. Play 1: a triple: **0:3**.  Play 2: a double with the runner on third not advancing: **0:3:23**.  Play 3: a triple-play (three outs): **0:3:23:XXX**.
+
+Now let's back up and review the rules of the game.
+
+A game of Major League Baseball advances through nine consecutive innings---each divided into two halves.  During the "top" of the inning (i.e. the first half), the visiting team can score; during the "bottom," the home team can score.
+
+Our knowledge of the history of the game comes from the meticulously constructed Retrosheet database.  While Major League Baseball began in 1871, in the early days, most events under study forever disappeared from history.  In 1930, sabermatricians began carefully recording each event.  So when we say that a certain occurence has never happened in all Baseball history, we really mean that it was _not recorded_ in the Retrosheet event data set, covering only 1930-2018. Our data ends at the end of the 2018 season, when we started this study.
+
+The Retrosheet database records event data for XXXXXX games (or game data for 218,167 games, going back to 1871) and XXXXXXX half-innings (since 1930), an average of 17.XXX half-innings per game.  One might expect 18 half innings per game, until we consider that the home team clinches a win if it is ahead after the top of the ninth.  In that scenario, the bottom of the ninth is not played (for a total of only 17 half-innings for the game).  On the other hand, if the score is tied at the end of the ninth inning, extra innings are played to break the tie (for a total of more than 18 half-innings for the game). And in exceptional circumstances, the referee may call the game early (perhaps resulting in fewer than 17 half-innings in the game).
+
+In each half-inning, one team tries to score, and the other defends.  There are always 9 defensive players on the field: a pitcher, a catcher, a shortstop, three fieldsmen, and three basemen (one defending each base).  However, at any given moment, there are substantially fewer offensive players on the field.  There is always a batter, and sometimes only a batter.  But in addition there can be up to 3 runners on base---up to one each, on first base, second base and third base.  Which bases have runners will be of utmost importance to us, so we have devised a notation to make this information easy to convey.
+
+0 --- bases empty
+
+1 --- runner only of first
+
+2 --- runner only on second
+
+3 --- runner only on third
+
+12 --- runners on first and second but not third
+
+13 --- runners on first and third but not second
+
+23 --- runners of second and third but not first
+
+123 --- bases loaded

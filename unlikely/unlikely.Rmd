@@ -8,3 +8,11 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# What is "unlikeliness?"
+
+To consider how "unlikely" something is, it is important to define the term and also produce a scale for which one can rank unlikeliness. 
+
+One method of this classification is take $log10$ of the expected number of trials it would take before we can expect the first occurance of the event. This is especially helpful when looking at the transition probabilities in baseball to discern between similar probabilities and qualify they as "rare" or "extremely rare". It also sets a standard for the term unlikeliness that can be used throughout the paper, making it easier to comprehend. 
+
+
