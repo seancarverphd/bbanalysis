@@ -9,36 +9,70 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Baseball involves an infinity of possibilities---things that have happened, frequently or infrequently, and things that have never happened, but someday may.  With a model we can compute probabilities of events in the future---even if they have never occurred in the past.
+_[Start with a teaser about the most unlikely half inning.  Describe the game up to the beginning of fated half-inning and tease the idea of what happens in the half inning then proceed with the following...]_
 
-We can characterize a half-inning in baseball by its length---the number of 'at-bats' before three outs bring the game to its next half-inning, or end the game.  With no cap on score, there are infinitely many possible half-innings, many of course have been played before, but an infinitude of remaining possibilities have not.  Some questions struck us.  what's the "shortest" half-inning that has never occurred in the major league, but might someday?  If this half-inning has never occurred, how long from now can we expect to wait to see it happen? Of the half-innings that _have_ occurred, which one has the lowest probability: i.e. which half-inning is _the most unlikely half-inning in baseball history_?  With a model, we can answer these questions---with substantial help from a computer and a powerful database.  We use a well-studied and often used model of baseball to get our answers.
+Baseball involves an infinity of possibilities---things that have happened, frequently or infrequently, and things that have _never_ happened, but someday may.  With a model, we can compute probabilities of events occurring in the future---events that have already occurred commonly or rarely, or even events that have never occurred in the past.
 
-So what's the shortest inning that has never been played?  We'll give this answer now, then review the rules of baseball, explain the notation used below, introduce our model, answer our questions, convey some fascinating statistics and reveal some compelling visualizations.
+Baseball is played in epochs called innings and half-innings.  We can characterize a half-inning in baseball by the number of plays or 'at-bats' before three outs advance the game to the next half-inning, or the end of the game.  The most unlikely inning in baseball history had XX plays whereas the longest inning had XX plays.  Indeed, there is a strong association between number of plays, and the probability of the half-inning, which we will explore after we intoduce the model which defines half-inning probability.
 
-The shortest half-innings all have three plays---you need three 'at-bats' to get three outs. These (and all other half-innings) start with bases empty, **0**.  While the individual plays listed here have all occurred before, the following exact sequence of plays never has: (1) a triple, **0:3**,  (2) a double with the runner on third not advancing, **0:3:23**, (3) a triple-play (three outs), **0:3:23:XXX**.  That minimally short inning has never been seen in the major leagues, or at least cannot be found in the vast Retrosheet event data set.
+With no cap on score, or number of plays, there are infinitely many possible half-innings.  Many, of course, have, in fact, been played before, sometime in the long history of the game.  That said, an infinitude of remaining possibilities have not ever been played.  
+
+Some questions struck us.  What's the "shortest" half-inning that has never occurred in Major League Baseball, but might someday?  If this half-inning has never occurred, how long from now can we expect to wait to see it happen? Of the half-innings that _have_ occurred, which one has the lowest probability: i.e. which half-inning is _the most unlikely half-inning in baseball history_?  With a model, we can answer these questions---with substantial help from a powerful computer and a large database.  We provide a link to our code below and reassure the interested reader that most modern laptops are powerful enough to handle our calculations, though they require user patience.  Our calculations use a well-studied and often used model of baseball to answer our questions: baseball's standard Markov chain model.
+
+So what's the shortest inning that has never been played?  We'll give this answer now, then review the rules of baseball, explain the notation we use, introduce the model, answer our questions, convey some fascinating statistics and reveal some compelling visualizations.
+
+The shortest half-innings in baseball all have three plays---you need at least three 'at-bats' to get three outs. These half-innings (and all other half-innings, for that matter) start with bases empty, and no outs **0**.  While all the individual plays listed here have occurred before, the following exact sequence of plays never has.  We call this half-inning the "white whale:" first a triple, **0:3**, second, a double with the runner on third not advancing, **0:3:23**,  and third, a triple-play (three outs), **0:3:23:XXX**.  That minimally short inning has never been seen in the major leagues, or at least cannot be found in the vast Retrosheet event data set, covering 1930 to 2018.
 
 Now let's back up and review the rules of the game.
 
 A game of Major League Baseball advances through nine consecutive innings---each divided into two halves.  During the "top" of the inning (i.e. the first half), the visiting team can score; during the "bottom," the home team can score.
 
-Our knowledge of the history of the game comes from the meticulously constructed Retrosheet database.  While Major League Baseball began in 1871, in the early days, most events under study forever disappeared from its history.  In 1930, sabermetricians began carefully and consistently recording each event.  So when we say that a certain possibility has never occurred in all baseball history, we really mean that it was _not recorded_ in the Retrosheet event data set, covering only major league games between 1930 and 2018. Our data ends at the end of the 2018 season, when we started this study.
+Our knowledge of the history of the game comes from the meticulously constructed Retrosheet database.  While Major League Baseball began in 1871, in the early days, most events under study forever disappeared from its history.  In 1930, sabermetricians began carefully and consistently recording each event.  So when we say that a certain possibility has never occurred in all baseball history, we really mean that it was _not recorded_ in the Retrosheet event data set, covering only major league games between 1930 and 2018. Our data covers games only to end of the 2018 season, because that was the available data when we started this study.
 
-The Retrosheet database records event data for 156,033 games (since 1930, or game data for 218,167 games, going back to 1871) which includes 2,798,505 half-innings (since 1930), an average of 17.94 half-innings per game.  One might expect 18 half innings per game, until we consider that the home team clinches a win if it is ahead after the top of the ninth.  In that scenario, the bottom of the ninth is not played (for a total of only 17 half-innings for the game).  That adjustment should bring the number closer to 17.5, however, if the score is tied at the end of the ninth inning, extra innings are played to break the tie (for a total of more than 18 half-innings for the game). Finally in exceptional circumstances, the referee may call the game early (perhaps resulting in fewer than 17 half-innings in the game).
+The Retrosheet database records event data for 156,033 games (since 1930, or game data for 218,167 games, going back to 1871).  The 156,033 games for which event data exist involve 2,798,505 half-innings (played between 1930 and 2018). This means that games had an average of 17.94 half-innings per game.  One might expect 18 half innings per game, until we consider that the home team clinches a win if it is ahead after the top of the ninth.  In that scenario, the bottom of the ninth is not played (for a total of only 17 half-innings for the game).  That adjustment should bring the number closer to 17.5, however, if the score is tied at the end of the ninth inning, extra innings are played to break the tie (for a total of more than 18 half-innings for the game). Finally in exceptional circumstances, the referee may call the game early (perhaps resulting in fewer than 17 half-innings in the game).
 
-In each half-inning, one team tries to score, and the other defends.  There are always 9 defensive players on the field: a pitcher, a catcher, a shortstop, three fieldsmen, and three basemen (one defending each base).  However, at any given moment, there are substantially fewer offensive players on the field.  There is always a batter, and sometimes only a batter.  But in addition there can be up to 3 runners on base---up to one each, on first base, second base and third base.  Which bases have runners will be of utmost importance to us, so we have devised a notation to make this information easy to convey.
+In each half-inning, one team tries to score, and the other defends.  There are always 9 defensive players on the field: a pitcher, a catcher, a shortstop, three fieldsmen, and three basemen (one defending each base).  
 
-0 --- bases empty
+While 9 defensive players occupy the field, at any given moment, there are substantially fewer offensive players on the field.  There is always a batter, and sometimes only a batter.  But in addition there can be up to 3 runners on base---up to one each, on first base, second base and third base.  Which bases have runners will be of utmost importance to us, so we have devised a notation to make this information easy to convey.
 
-1 --- runner only on first
+**0** --- bases empty
 
-2 --- runner only on second
+**1** --- runner only on first
 
-3 --- runner only on third
+**2** --- runner only on second
 
-12 --- runners on first and second but not third
+**3** --- runner only on third
 
-13 --- runners on first and third but not second
+**12** --- runners on first and second but not third
 
-23 --- runners of second and third but not first
+**13** --- runners on first and third but not second
 
-123 --- bases loaded
+**23** --- runners of second and third but not first
+
+**123** --- bases loaded
+
+Of all the myriad details about a baseball game, there is only one more item, beyond the information concerning which bases have runners, that our model cares about: the number of outs that have occurred since the beginning of the half-inning.  
+
+To continue our review of baseball's rules, the defense tries to force outs on the offense.  If a offensive player is out, he or she leaves the field, losing his or her chance to score.  (But only men play in the major league).  After three outs, the half-inning is over and, the other team has a chance to score, provided the game has more half-innings.
+
+We have devised a notation that makes it easy to convey the number of outs in combination the occupancy of the bases:
+
+_[blank]_ --- no outs
+
+**X** --- 1 out
+
+**XX** --- 2 outs
+
+**XXX** --- 3 outs
+
+We combine the two notations with the following examples:
+
+**0** --- bases empty, no outs
+
+**0X** --- bases empty, 1 out
+
+**12XX** --- runners on first and second, two outs
+
+So does **123** mean "bases loaded with no outs," or "bases loaded with the number of outs unspecified?"  To resolve this ambiguity we will always use the notation for base occupancy together with the notation for outs.  So **123** will always mean "bases loaded with _no_ outs."
+
+Note that "three outs" signifies the end of the half-inning.  For this reason, three outs will always be listed as **XXX** and will never be listed with information about the bases, which as far as our model is concerned remains irrelevant.
