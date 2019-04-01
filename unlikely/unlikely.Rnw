@@ -1,5 +1,6 @@
 \documentclass{article}
 \usepackage{setspace}
+\usepackage{tcolorbox}
 \title{The most unlikely half-inning in baseball history}
 \author{Sean G. Carver and Jake Berberian}
 \doublespace
@@ -14,9 +15,10 @@ following\ldots{}{]}}
 Baseball involves an infinity of possibilities---things that have
 happened, frequently or infrequently, and things that have \emph{never}
 happened, but someday may. 
-With a model, we can compute probabilities of
-events occurring in the future---events that have already occurred
-commonly or rarely, or even events that have never occurred in the past.
+With a model, we can compute probabilities of events occurring in the
+future---events that may have already occurred in the past (be they
+commonplace or rare), or even events that may have never occurred in
+the past.
 
 Baseball is played in epochs called innings and half-innings. 
 We can characterize a half-inning in baseball by the number of plays
@@ -119,6 +121,7 @@ second base and third base.
 Which bases have runners will be of utmost importance to us, so we
 have devised a notation to make this information easy to convey.
 
+\begin{tcolorbox}
 \textbf{0} --- bases empty
 
 \textbf{1} --- runner only on first
@@ -134,6 +137,7 @@ have devised a notation to make this information easy to convey.
 \textbf{23} --- runners of second and third but not first
 
 \textbf{123} --- bases loaded
+\end{tcolorbox}
 
 Of all the myriad details about a baseball game, there is only one more
 item, beyond the information concerning which bases have runners, that
@@ -150,6 +154,7 @@ chance to score, provided the game has more half-innings.
 We have devised a notation that makes it easy to convey the number of
 outs in combination the occupancy of the bases:
 
+\begin{tcolorbox}
 \emph{{[}blank{]}} --- no outs
 
 \textbf{X} --- 1 out
@@ -157,20 +162,28 @@ outs in combination the occupancy of the bases:
 \textbf{XX} --- 2 outs
 
 \textbf{XXX} --- 3 outs
+\end{tcolorbox}
 
-We combine the two notations with the following examples:
+When we combine notations we need to say whether a base indication
+with no trailing \textbf{X}'s means that there are no outs or means that
+the outs are unspecified.  We will never have a reason not to specify
+the outs, so hereafter \textbf{123} will mean ``bases loaded with
+\emph{no} outs.''
 
+Here are some more examples.
+
+\begin{tcolorbox}
 \textbf{0} --- bases empty, no outs
 
 \textbf{0X} --- bases empty, 1 out
 
+\textbf{3XX} --- runner on third, 2 outs.
+
 \textbf{12XX} --- runners on first and second, two outs
 
-So does \textbf{123} mean ``bases loaded with no outs,'' or ``bases
-loaded with the number of outs unspecified?''  
-To resolve this ambiguity we will always use the notation for base
-occupancy together with the notation for outs. 
-So \textbf{123} will always mean ``bases loaded with \emph{no} outs.''
+\textbf{2} --- runner on second, no outs
+\end{tcolorbox}
+
 
 Note that ``three outs'' signifies the end of the half-inning. 
 For this reason, three outs will always be listed as \textbf{XXX} and
