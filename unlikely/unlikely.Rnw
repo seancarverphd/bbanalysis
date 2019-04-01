@@ -1,6 +1,8 @@
 \documentclass{article}
+\usepackage{setspace}
 \title{The most unlikely half-inning in baseball history}
 \author{Sean G. Carver and Jake Berberian}
+\doublespace
 \begin{document}
 \maketitle
 
