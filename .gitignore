@@ -37,3 +37,6 @@ rsconnect/
 .Rproj.user
 bbanalysis.Rproj
 backup/
+klicopy/data/
+*.html
+*.Rmd~
