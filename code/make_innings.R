@@ -45,8 +45,13 @@ get.u.inning <- function(inning) {
   }
   return(u)
 }
+
 add.year.innings <- function(years) {
   for (y in years) {
-    print(y)
+    game.list <- query(paste("SELECT game_id FROM event_games WHERE year = ", y))
+    for (game in game.list) {
+      event.list <- query(paste("SELECT game_id, event_id, inning, batting_team, old_state, new_state, transition FROM plays WHERE game_id = '",game,"'",sep=""))
+      # ADD CODE TO PROCESS event.list here.
+    }
   }
 }
