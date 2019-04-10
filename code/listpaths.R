@@ -1,5 +1,9 @@
 library(stringr)
 
+count.half.innings.n <- function(n) {
+  return(length(list.half.innings.n(n)))
+}
+
 list.half.innings.n <- function(n) {
   paths <- list.paths.n(n)
   return(paths[grepl('XXX', paths)])
