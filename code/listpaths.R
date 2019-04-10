@@ -61,8 +61,19 @@ transitions.from <- function(from.string) {
   return(whole.transitions)
 }
 
+transient.states <- function() {
+  return(c("0","0X","0XX",
+           "3","3X","3XX",
+           "2","2X","2XX",
+           "23","23X","23XX",
+           "1","1X","1XX",
+           "13","13X","13XX",
+           "12","12X","12XX",
+           "123","123X","123XX"))
+}
+
 all.transitions <- function() {
-  from.states <- rowcodes()
+  from.states <- transient.states()
   transitions <- c()
   for (state in from.states) {
     transitions <- c(transitions, transitions.from(state))
