@@ -1,6 +1,6 @@
 library(RMySQL)
 
-con <- dbConnect(MySQL(), user='baseball', password='BabeRuth60!', dbname='retrotrans', 'host'='localhost')
+con <- dbConnect(MySQL(), user='baseball', password='BabeRuth60!', dbname='retrosheet', 'host'='localhost')
 
 close.db <- function() {
   dbDisconnect(con)
@@ -50,7 +50,7 @@ same.half.inning <- function(inning, batting, event) {
   return (inning==event$inning & batting==event$batting_team)
 }
 
-check.year.innings <- function(years) {
+check.year.games <- function(years) {
   for (y in years) {
     print(y)
     game.list <- query(paste("SELECT game_id FROM event_games WHERE year = ", y))
@@ -71,6 +71,33 @@ check.year.innings <- function(years) {
             inning <- inning + 1
           }
           stopifnot(same.half.inning(inning, batting, event.list[j,]))
+      }
+    }
+  }
+}
+
+check.year.innings <- function(years) {
+  for (y in years) {
+    print(y)
+    game.list <- query(paste("SELECT * FROM event_games WHERE year = ", y))
+    for(i in 1:nrow(game.list)) {
+      game <- game.list[i,]
+      event.list <- query(paste("SELECT game_id, event_id, inning, batting_team, old_state, new_state, transition FROM plays WHERE game_id = '",game,"' ORDER BY event_id",sep=""))
+      if (event.list[1,]$game_id == 'SEA200709261') next
+      sequence <- '0'
+      inning <- 1
+      batting <- 0
+      overlap <- '0'
+      for (j in 1:nrow(event.list)) {
+        event <- event.list[j,]
+        if (same.half.inning(inning, batting, event)) {
+          old_state <- event$old_state
+          old_strip <- substr(old_state,1,nchar(old_state)-1)
+          stopifnot(identical(old_strip, overlap))
+          sequence <- paste(sequence, event$new_state)
+          new_state <- event$new_state
+          overlap <- substr(new_state,2,nchar(new_state))
+        }
       }
     }
   }
