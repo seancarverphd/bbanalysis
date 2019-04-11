@@ -1,6 +1,6 @@
 library(RMySQL)
 
-con <- dbConnect(MySQL(), user='baseball', password='BabeRuth60!', dbname='retrosheet', 'host'='localhost')
+con <- dbConnect(MySQL(), user='baseball', password='BabeRuth60!', dbname='retrotrans', 'host'='localhost')
 
 close.db <- function() {
   dbDisconnect(con)
@@ -46,12 +46,32 @@ get.u.inning <- function(inning) {
   return(u)
 }
 
-add.year.innings <- function(years) {
+same.half.inning <- function(inning, batting, event) {
+  return (inning==event$inning & batting==event$batting_team)
+}
+
+check.year.innings <- function(years) {
   for (y in years) {
+    print(y)
     game.list <- query(paste("SELECT game_id FROM event_games WHERE year = ", y))
-    for (game in game.list) {
-      event.list <- query(paste("SELECT game_id, event_id, inning, batting_team, old_state, new_state, transition FROM plays WHERE game_id = '",game,"'",sep=""))
-      # ADD CODE TO PROCESS event.list here.
+    for(i in 1:nrow(game.list)) {
+      game <- game.list[i,]
+      event.list <- query(paste("SELECT game_id, event_id, inning, batting_team, old_state, new_state, transition FROM plays WHERE game_id = '",game,"' ORDER BY event_id",sep=""))
+      if (event.list[1,]$game_id == 'SEA200709261') next
+      inning <- 1
+      batting <- 0
+      stopifnot(same.half.inning(inning, batting, event.list[1,]))
+      for (j in 1:nrow(event.list)) {
+        stopifnot(j==event.list[j,]$event_id)
+        if (!same.half.inning(inning, batting, event.list[j,]))
+          if (batting==0) batting <- 1
+          else {
+            stopifnot(batting==1)
+            batting <- 0
+            inning <- inning + 1
+          }
+          stopifnot(same.half.inning(inning, batting, event.list[j,]))
+      }
     }
   }
 }
