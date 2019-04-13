@@ -128,23 +128,24 @@ check.year.innings <- function(years) {
     }
   }
 }
+
 paste.values <- function(...) {
   arguments <- list(...)
   first <- TRUE
   for (a in arguments)
     if (first) {
-      whole <- a
+      whole <- paste('(',a,sep='')
       first <- FALSE
     }
     else whole <- paste(whole,',',a,sep='')
-  return (whole)
+  return (paste(whole,')',sep=''))
 }
 
 q <- function(inner) {
   return (paste("'",inner,"'",sep=''))
 }
 
-insert.half.inning <- function(game, inning, batting_team, overlap, sequence) {
+prepare.insert <- function(game, inning, batting_team, overlap, sequence) {
   game_id <- game$game_id
   # inning <- inning
   # batting_team <- batting_team
@@ -165,15 +166,25 @@ insert.half.inning <- function(game, inning, batting_team, overlap, sequence) {
   all_batter <- !grepl('[.]',sequence)
   # sequence <- sequence
   u_sequence <- get.u.inning(sequence)
-  list.cols <- "game_id, inning, batting_team, home_team, visiting_team, at_bat, at_field, year, date, double_header_game, finalxxx, all_batter, sequence, u_sequence"
-  list.vals <- paste.values(q(game_id), inning, batting_team, q(home_team), q(visiting_team), q(at_bat), q(at_field), year, q(date), double_header_game, finalxxx, all_batter, q(sequence), u_sequence)
-  query(paste("INSERT INTO innings1930 (", list.cols, ") VALUES (", list.vals, ");",sep='')) 
+  new.row <- paste.values(q(game_id), inning, batting_team, q(home_team), q(visiting_team), q(at_bat), q(at_field), year, q(date), double_header_game, finalxxx, all_batter, q(sequence), u_sequence)
+  return(new.row)
 }
-  
-make.year.innings <- function(years) {
+
+insert.year <- function(list.all, table) {
+  list.cols <- " (game_id, inning, batting_team, home_team, visiting_team, at_bat, at_field, year, date, double_header_game, finalxxx, all_batter, sequence, u_sequence)"
+  print("Inserting ...")
+  query(paste("INSERT INTO ", table, list.cols, " VALUES ",paste(list.all,collapse=","),";", sep='')) 
+}
+
+make.year.innings <- function(years, table) {
   for (y in years) {
     print(y)
+    n <- query(paste("SELECT COUNT(DISTINCT(CONCAT(plays.game_id, inning, batting_team))) FROM plays INNER JOIN event_games ON event_games.game_id=plays.game_id WHERE year=",y,";",sep=""))
+    n <- n[1,1]
+    print(paste(n,"innings"))
+    list.all <- vector("list", n)
     game.list <- query(paste("SELECT * FROM event_games WHERE year = ", y))
+    k <- 0
     for(i in 1:nrow(game.list)) {
       game <- game.list[i,]
       event.list <- query(paste("SELECT game_id, event_id, inning, batting_team, old_state, new_state, transition FROM plays WHERE game_id = '",game,"' ORDER BY event_id",sep=""))
@@ -187,23 +198,19 @@ make.year.innings <- function(years) {
         if (same.half.inning(inning, batting, event)) {  # runs if event continues half.inning
           old_state <- event$old_state
           old_strip <- substr(old_state,1,nchar(old_state)-1)
-          #if (!identical(old_strip, overlap)) {
-          #  print(old_strip)
-          #  print(overlap)
-          # }
           stopifnot(identical(old_strip, overlap))
           new_state <- event$new_state
           sequence <- paste(sequence, new_state, sep='')
           overlap <- substr(new_state,2,nchar(new_state))
         } 
         else {  # runs if event starts new half.inning old_state 0, new_state ??
-          # insert completed inning into database
-          insert.half.inning(game, inning, batting, overlap, sequence)
+          k <- k+1  # insert previous completed inning into database
+          if (k%%1000==0) print(k)
+          list.all[[k]] <- prepare.insert(game, inning, batting, overlap, sequence)
           new_state <- event$new_state
           sequence <- paste('0',new_state,sep='')
           overlap <- substr(new_state,2,nchar(new_state))
-          # Now update inning counters
-          if (batting==0) batting <- 1
+          if (batting==0) batting <- 1  # Now update inning counters
           else {
             stopifnot(batting==1)
             batting <- 0
@@ -211,10 +218,13 @@ make.year.innings <- function(years) {
           }
         }
       }
-      # insert completed last half.inning (in game) into database
-      insert.half.inning(game, inning, batting, overlap, sequence)
+      k <- k+1  # insert completed last half.inning (in game) into database
+      if (k%%1000==0) print(k)
+      list.all[[k]] <- prepare.insert(game, inning, batting, overlap, sequence)
     }
+  stopifnot(k==n)
+  insert.year(list.all, table)
   }
 }
 
-make.year.innings(1930)
+make.year.innings(1930:1939,"innings30s")
