@@ -165,14 +165,20 @@ prepare.insert <- function(table, game, inning, batting_team, overlap, sequence)
   # sequence <- sequence
   u_sequence <- get.u.inning(sequence)
   new.row <- paste.values(q(game_id), inning, batting_team, q(home_team), q(visiting_team), q(at_bat), q(at_field), year, q(date), double_header_game, finalxxx, all_batter, q(sequence), u_sequence)
-  insert.row(new.row, table)
+  # insert.row(new.row, table)
   return(new.row)
 }
 
 insert.row <- function(new.row, table) {
   list.cols <- " (game_id, inning, batting_team, home_team, visiting_team, at_bat, at_field, year, date, double_header_game, finalxxx, all_batter, sequence, u_sequence)"
-  query(paste("INSERT INTO ", table, list.cols, " VALUES ",new.row)) 
   #print(paste("INSERT INTO ", table, list.cols, " VALUES ",new.row))
+  query(paste("INSERT INTO ", table, list.cols, " VALUES ",new.row))
+}
+
+insert.batch <- function(list.batch, table) {
+  list.cols <- " (game_id, inning, batting_team, home_team, visiting_team, at_bat, at_field, year, date, double_header_game, finalxxx, all_batter, sequence, u_sequence)"
+  # print(paste("INSERT INTO ", table, list.cols, " VALUES ",paste(list.batch,collapse=',')))
+  query(paste("INSERT INTO ", table, list.cols, " VALUES ",paste(list.batch,collapse=',')))
 }
 
 init.inning.counter <- function(game) {
@@ -201,41 +207,54 @@ increment.inning.counter <- function(game, counter) {
       counter$inning <- counter$inning + 1
     }
   }
-  # print(paste("New inning",counter$inning,"New batting",counter$batting))
   return (counter)
 }
 
 same.half.inning <- function(counter, event) {
-  # print(paste("counterinning", counter$inning, "eventinning", event$inning, "counterbatting", counter$batting, "eventbatting", event$batting_team))
   return (counter$inning==event$inning & counter$batting==event$batting_team)
 }
 
-print.update <- function(k, batch.size, t0) {
+batch.update <- function(list.batch, k, batch.size, table, n, t0) {
   if (k%%batch.size==0) {
     b <- as.integer(k/batch.size)
-    print(paste("batch",b,"size",batch.size,"time",Sys.time()-t0))
-    t0 <- Sys.time
+    # trim list.batch if not complete (last batch)
+    list.batch <- list.batch[1:batch.index(k,batch.size)]
+    insert.batch(list.batch, table)
+    list.batch <- vector("list", batch.size)
+    print(paste("batch",b,"size",batch.size,"of",n))
+    print(Sys.time() - t0)
   }
-  return (t0)
+  return (list.batch)
+}
+
+batch.index <- function(k, batch.size) {
+  return (((k-1)%%batch.size)+1)
 }
 
 make.year.innings <- function(years, table, batch.size) {
   for (y in years) {
     print(y)
+    # Get n number of half.innings in year
     n <- query(paste("SELECT COUNT(DISTINCT(CONCAT(plays.game_id, inning, batting_team))) FROM plays INNER JOIN event_games ON event_games.game_id=plays.game_id WHERE year=",y,";",sep=""))
     n <- n[1,1]
+    # Get all events for year
     year.event.list <- query(paste("SELECT plays.game_id, plays.event_id, plays.inning, plays.batting_team, old_state, new_state, transition FROM plays INNER JOIN event_games ON event_games.game_id = plays.game_id WHERE year=",y,sep=""))
+    # Get all games for year
     game.list <- query(paste("SELECT * FROM event_games WHERE year = ", y))
-    print(paste(n,"innings"))
+    # Done pulling data print number of innings and games
+    print(paste(n,"innings and", nrow(game.list), "games for year"))
     t0 <- Sys.time()
     k <- 0
+    list.batch <- vector("list",batch.size)
     for(i in 1:nrow(game.list)) {
       game <- game.list[i,]
-      list.batch = list()
+      # Pull out events for the game
       game.event.list <- subset(year.event.list, game_id==game[1,1])
+      # Should already be ordered but just in case
       game.event.list <- game.event.list[order(game.event.list$event_id),]
+      # The following assertion tests (imperfectly) that events are in a 1:n sequence
       stopifnot(game.event.list[nrow(game.event.list), 2]==nrow(game.event.list))
-      counter <- init.inning.counter(game)
+      counter <- init.inning.counter(game)  # different only for SEA200709261
       sequence <- '0'
       overlap <- '0'
       for (j in 1:nrow(game.event.list)) {  # loop over events in game
@@ -250,8 +269,10 @@ make.year.innings <- function(years, table, batch.size) {
         } 
         else {  # runs if event starts new half.inning old_state 0, new_state ??
           k <- k+1  # insert previous completed inning into database
-          prepare.insert(table, game, counter$inning, counter$batting, overlap, sequence)
-          print.update(k, batch.size, t0)
+          list.batch[[batch.index(k,batch.size)]] <- prepare.insert(table, game, counter$inning, counter$batting, overlap, sequence)
+          # print(list.batch[[batch.index(k,batch.size)]])
+          list.batch <- batch.update(list.batch, k, batch.size, table, n, t0)
+          if (is.null(list.batch[[1]])) t0 <- Sys.time()
           new_state <- event$new_state
           sequence <- paste('0',new_state,sep='')
           overlap <- substr(new_state,2,nchar(new_state))
@@ -259,10 +280,12 @@ make.year.innings <- function(years, table, batch.size) {
         }
       }
       k <- k+1  # insert completed last half.inning (in game) into database
-      prepare.insert(table, game, counter$inning, counter$batting, overlap, sequence)
-      print.update(k, batch.size, t0)
+      list.batch[[batch.index(k,batch.size)]] <- prepare.insert(table, game, counter$inning, counter$batting, overlap, sequence)
+      # print(list.batch[[batch.index(k,batch.size)]])
+      list.batch <- batch.update(list.batch, k, batch.size, table, n, t0)
+      if (is.null(list.batch[[1]])) t0 <- Sys.time()
     }
-  stopifnot(k==n)
+    stopifnot(k==n)
   }
 }
 
