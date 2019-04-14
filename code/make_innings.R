@@ -214,8 +214,8 @@ same.half.inning <- function(counter, event) {
   return (counter$inning==event$inning & counter$batting==event$batting_team)
 }
 
-batch.update <- function(list.batch, k, batch.size, table, n, t0) {
-  if (k%%batch.size==0) {
+batch.update <- function(list.batch, k, batch.size, table, n, t0, force=FALSE) {
+  if (k%%batch.size==0 | force) {
     b <- as.integer(k/batch.size)
     # trim list.batch if not complete (last batch)
     list.batch <- list.batch[1:batch.index(k,batch.size)]
@@ -271,7 +271,7 @@ make.year.innings <- function(years, table, batch.size) {
           k <- k+1  # insert previous completed inning into database
           list.batch[[batch.index(k,batch.size)]] <- prepare.insert(table, game, counter$inning, counter$batting, overlap, sequence)
           # print(list.batch[[batch.index(k,batch.size)]])
-          list.batch <- batch.update(list.batch, k, batch.size, table, n, t0)
+          list.batch <- batch.update(list.batch, k, batch.size, table, n, t0, force=FALSE)
           if (is.null(list.batch[[1]])) t0 <- Sys.time()  # if just updated, reset time counter
           new_state <- event$new_state
           sequence <- paste('0',new_state,sep='')
@@ -282,12 +282,12 @@ make.year.innings <- function(years, table, batch.size) {
       k <- k+1  # insert completed last half.inning (in game) into database
       list.batch[[batch.index(k,batch.size)]] <- prepare.insert(table, game, counter$inning, counter$batting, overlap, sequence)
       # print(list.batch[[batch.index(k,batch.size)]])
-      list.batch <- batch.update(list.batch, k, batch.size, table, n, t0)
+      list.batch <- batch.update(list.batch, k, batch.size, table, n, t0, force=FALSE)
       if (is.null(list.batch[[1]])) t0 <- Sys.time()  # if just updated, reset time counter
     }
     stopifnot(k==n)
-    if (!is.null(list.batch[[1]])) batch.update(list.batch, k, batch.size, table, n, t0)  # if not just updated, update last partial batch
+    if (!is.null(list.batch[[1]])) batch.update(list.batch, k, batch.size, table, n, t0, force=TRUE)  # if not just updated, update last partial batch
   }
 }
 
-make.year.innings(2007,"innings2007",1000)
+make.year.innings(1930:2018,"innings",1000)
