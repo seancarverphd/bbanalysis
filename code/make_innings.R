@@ -272,7 +272,7 @@ make.year.innings <- function(years, table, batch.size) {
           list.batch[[batch.index(k,batch.size)]] <- prepare.insert(table, game, counter$inning, counter$batting, overlap, sequence)
           # print(list.batch[[batch.index(k,batch.size)]])
           list.batch <- batch.update(list.batch, k, batch.size, table, n, t0)
-          if (is.null(list.batch[[1]])) t0 <- Sys.time()
+          if (is.null(list.batch[[1]])) t0 <- Sys.time()  # if just updated, reset time counter
           new_state <- event$new_state
           sequence <- paste('0',new_state,sep='')
           overlap <- substr(new_state,2,nchar(new_state))
@@ -283,9 +283,10 @@ make.year.innings <- function(years, table, batch.size) {
       list.batch[[batch.index(k,batch.size)]] <- prepare.insert(table, game, counter$inning, counter$batting, overlap, sequence)
       # print(list.batch[[batch.index(k,batch.size)]])
       list.batch <- batch.update(list.batch, k, batch.size, table, n, t0)
-      if (is.null(list.batch[[1]])) t0 <- Sys.time()
+      if (is.null(list.batch[[1]])) t0 <- Sys.time()  # if just updated, reset time counter
     }
     stopifnot(k==n)
+    if (!is.null(list.batch[[1]])) batch.update(list.batch, k, batch.size, table, n, t0)  # if not just updated, update last partial batch
   }
 }
 
