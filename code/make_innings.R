@@ -1,5 +1,6 @@
 library(RMySQL)
 library(rlist)
+library(stringr)
 
 con <- dbConnect(MySQL(), user='baseball', password='BabeRuth60!', dbname='retrosheet', 'host'='localhost')
 
@@ -71,10 +72,6 @@ get.u.inning <- function(inning) {
     u <- u + t0[transition,]$u_conditional
   }
   return(u)
-}
-
-same.half.inning <- function(inning, batting, event) {
-  return (inning==event$inning & batting==event$batting_team)
 }
 
 check.year.games <- function(years) {
@@ -175,35 +172,75 @@ prepare.insert <- function(table, game, inning, batting_team, overlap, sequence)
 insert.row <- function(new.row, table) {
   list.cols <- " (game_id, inning, batting_team, home_team, visiting_team, at_bat, at_field, year, date, double_header_game, finalxxx, all_batter, sequence, u_sequence)"
   query(paste("INSERT INTO ", table, list.cols, " VALUES ",new.row)) 
+  #print(paste("INSERT INTO ", table, list.cols, " VALUES ",new.row))
+}
+
+init.inning.counter <- function(game) {
+  # For the game SEA200709261 the home team batted first.  For no other game did this happen.
+  if (identical(game$game_id,'SEA200709261')) counter <- list(1,1)
+  else counter <- list(1,0)
+  names(counter) <- c("inning", "batting")
+  return (counter)
+}
+
+increment.inning.counter <- function(game, counter) {
+  # For the game SEA200709261 the home team batted first.  For no other game did this happen.
+  if (identical(game$game_id,'SEA200709261')) {
+    if (counter$batting==1) counter$batting <- 0
+    else {
+      stopifnot(counter$batting==0)
+      counter$batting <- 1
+      counter$inning <- counter$inning + 1
+    }
+  }
+  else {
+    if (counter$batting==0) counter$batting <- 1  # Now update inning counters
+    else {
+      stopifnot(counter$batting==1)
+      counter$batting <- 0
+      counter$inning <- counter$inning + 1
+    }
+  }
+  # print(paste("New inning",counter$inning,"New batting",counter$batting))
+  return (counter)
+}
+
+same.half.inning <- function(counter, event) {
+  # print(paste("counterinning", counter$inning, "eventinning", event$inning, "counterbatting", counter$batting, "eventbatting", event$batting_team))
+  return (counter$inning==event$inning & counter$batting==event$batting_team)
+}
+
+print.update <- function(k, batch.size, t0) {
+  if (k%%batch.size==0) {
+    b <- as.integer(k/batch.size)
+    print(paste("batch",b,"size",batch.size,"time",Sys.time()-t0))
+    t0 <- Sys.time
+  }
+  return (t0)
 }
 
 make.year.innings <- function(years, table, batch.size) {
   for (y in years) {
     print(y)
-    print("Downloading ...")
     n <- query(paste("SELECT COUNT(DISTINCT(CONCAT(plays.game_id, inning, batting_team))) FROM plays INNER JOIN event_games ON event_games.game_id=plays.game_id WHERE year=",y,";",sep=""))
     n <- n[1,1]
     year.event.list <- query(paste("SELECT plays.game_id, plays.event_id, plays.inning, plays.batting_team, old_state, new_state, transition FROM plays INNER JOIN event_games ON event_games.game_id = plays.game_id WHERE year=",y,sep=""))
-    print(paste(n,"innings"))
     game.list <- query(paste("SELECT * FROM event_games WHERE year = ", y))
-    print("Constructing ...")
+    print(paste(n,"innings"))
+    t0 <- Sys.time()
     k <- 0
-    b <- 0
     for(i in 1:nrow(game.list)) {
       game <- game.list[i,]
       list.batch = list()
-      print(game[1,1])
       game.event.list <- subset(year.event.list, game_id==game[1,1])
       game.event.list <- game.event.list[order(game.event.list$event_id),]
       stopifnot(game.event.list[nrow(game.event.list), 2]==nrow(game.event.list))
-      if (game.event.list[1,]$game_id == 'SEA200709261') next
+      counter <- init.inning.counter(game)
       sequence <- '0'
-      inning <- 1
-      batting <- 0
       overlap <- '0'
       for (j in 1:nrow(game.event.list)) {  # loop over events in game
         event <- game.event.list[j,]
-        if (same.half.inning(inning, batting, event)) {  # runs if event continues half.inning
+        if (same.half.inning(counter, event)) {  # runs if event continues half.inning
           old_state <- event$old_state
           old_strip <- substr(old_state,1,nchar(old_state)-1)
           stopifnot(identical(old_strip, overlap))
@@ -213,32 +250,20 @@ make.year.innings <- function(years, table, batch.size) {
         } 
         else {  # runs if event starts new half.inning old_state 0, new_state ??
           k <- k+1  # insert previous completed inning into database
-          prepare.insert(table, game, inning, batting, overlap, sequence)
-          if (k%%batch.size==0) {
-            b <- b+1
-            print(paste("batch",b))
-          }
+          prepare.insert(table, game, counter$inning, counter$batting, overlap, sequence)
+          print.update(k, batch.size, t0)
           new_state <- event$new_state
           sequence <- paste('0',new_state,sep='')
           overlap <- substr(new_state,2,nchar(new_state))
-          if (batting==0) batting <- 1  # Now update inning counters
-          else {
-            stopifnot(batting==1)
-            batting <- 0
-            inning <- inning + 1
-          }
+          counter <- increment.inning.counter(game, counter)
         }
       }
       k <- k+1  # insert completed last half.inning (in game) into database
-      prepare.insert(table, game, inning, batting, overlap, sequence)
-      if (k%%batch.size==0) {
-        b <- b+1
-        print(paste("batch",b))
-      }
+      prepare.insert(table, game, counter$inning, counter$batting, overlap, sequence)
+      print.update(k, batch.size, t0)
     }
   stopifnot(k==n)
-  insert.year(list.all, table)
   }
 }
 
-make.year.innings(1930:1939,"innings30s",1000)
+make.year.innings(2007,"innings2007",1000)
