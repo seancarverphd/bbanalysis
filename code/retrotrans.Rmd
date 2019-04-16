@@ -1,0 +1,37 @@
+---
+title: "retrotrans"
+date: "6 April 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(DBI)
+library(RMySQL)
+```
+
+
+```{r}
+retrotrans = dbConnect(MySQL(), user='root', dbname='retrotrans')
+dbListTables(retrotrans)
+```
+
+```{r}
+# Finds some of the most "unlikely" innings
+fetch(dbSendQuery(retrotrans, "select * from transitions where u_conditional > 3.7"), n=-1)
+```
+
+```{r}
+# Finds some of the least "unlikely" innings
+fetch(dbSendQuery(retrotrans, "select * from transitions where u_conditional < .3"), n=-1)
+```
+
+```{r}
+fetch(dbSendQuery(retrotrans, "select * from event_games where year = 2018 limit 100"), n=-1)
+```
+
+
+
