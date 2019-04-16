@@ -5,6 +5,7 @@
 \author{Sean G. Carver and Jake Berberian}
 \doublespace
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 \maketitle
 
 \emph{{[}Start with a teaser about the most unlikely half inning.
@@ -189,5 +190,23 @@ Note that ``three outs'' signifies the end of the half-inning.
 For this reason, three outs will always be listed as \textbf{XXX} and
 will never be listed with information about the bases, which as far as
 our model is concerned remains irrelevant.
+
+<<load,eval=T,echo=F,cache=F,message=F>>=
+library(RMySQL)
+library(ggplot2)
+con <- dbConnect(MySQL(), user='baseball', password='BabeRuth60!', dbname='retrotrans', 'host'='localhost')
+
+query <- function(...) {
+  dbGetQuery(con, ...)
+}
+@
+
+
+<<utransfigure,eval=T,echo=F,cache=F>>=
+trans <- query("SELECT * FROM transitions;")
+ostates <- query("SELECT * FROM old_states")
+
+ggplot(data=trans, mapping=aes(x=u_old_state, y=u_conditional, group=transition)) + geom_point()
+@
 
 \end{document}
