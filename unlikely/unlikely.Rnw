@@ -1,25 +1,28 @@
 \documentclass{article}
 \usepackage{setspace}
 \usepackage{tcolorbox}
-\title{The most unlikely half-inning in baseball history}
+\title{The most unlikely game in baseball history}
 \author{Sean G. Carver and Jake Berberian}
 \doublespace
 \begin{document}
 \SweaveOpts{concordance=TRUE}
 \maketitle
 
-\emph{{[}Start with a teaser about the most unlikely half inning.
-Describe the game up to the beginning of fated half-inning and tease the
-idea of what happens in the half inning then proceed with the
-following\ldots{}{]}}
+The most unlikely games in baseball's history tend to also be the
+highest scoring ones.  But this answer depends only on what question
+you ask.  If you ask ``what game from baseball's history would require
+the most future games to see the exact sequence of plays reappear,''
+then that game (for the major leagues) would almost certainly be June
+28, 1871 game between [TRO] and [PH1] 33-49 (82 points total).  But
+these exists another way of measuring unlikeliness which tends to
+favor the shortest innings.
 
 Baseball involves an infinity of possibilities---things that have
-happened, frequently or infrequently, and things that have \emph{never}
-happened, but someday may. 
-With a model, we can compute probabilities of events occurring in the
-future---events that may have already occurred in the past (be they
-commonplace or rare), or even events that may have never occurred in
-the past.
+happened, frequently or infrequently, and things that have
+\emph{never} happened, but someday may.  With a model, we can compute
+probabilities of events occurring in the future---events that may have
+already occurred in the past (be they commonplace or rare), or even
+events that may have never occurred in the past.
 
 Baseball is played in epochs called innings and half-innings. 
 We can characterize a half-inning in baseball by the number of plays
@@ -194,7 +197,7 @@ our model is concerned remains irrelevant.
 <<load,eval=T,echo=F,cache=F,message=F>>=
 library(RMySQL)
 library(ggplot2)
-con <- dbConnect(MySQL(), user='baseball', password='BabeRuth60!', dbname='retrotrans', 'host'='localhost')
+con <- dbConnect(MySQL(), user='baseball', password='BabeRuth60!', dbname='retrosheet', 'host'='localhost')
 
 query <- function(...) {
   dbGetQuery(con, ...)
