@@ -8,9 +8,16 @@
 \SweaveOpts{concordance=TRUE}
 \maketitle
 
-Baseball involves an infinity of possibilities---things that have happened before, frequently or infrequently, and things that have \emph{never} happened, yet, but someday may.
-With a mathematical description of what we expect from data, in other words, \emph{a model}, we can precisely estimate probabilities of occurrences happening in the future---occurrences that may have
-already happened in the past (be they commonplace or rare), and those that have not yet transpired until, or at least were never recorded up to now.
+Baseball involves an infinity of possibilities---things that have
+happened before, frequently or infrequently, and things that have
+\emph{never} happened, yet, but someday may.
+With a mathematical description of what we expect from data, in other
+words, \emph{a model}, we can precisely estimate probabilities of
+occurrences happening in the future---occurrences that may have
+already happened in the past (be they commonplace or rare), as well as
+those that have not yet transpired, or, at least, not yet recorded.
+(Our records of what has happened in the past, though extensive,
+remain incomplete.)
 
 Baseball is played in epochs called innings and half-innings. 
 We can characterize a half-inning in baseball by the number of plays
@@ -19,10 +26,9 @@ half-inning, or the end of the game.
 
 With no cap on score, or number of plays, there are infinitely many
 possible half-innings. 
-Many, of course, have, in fact, been played before, and recorded, sometime in the
-long history of the major leagues. 
-That said, an infinitude of remaining possibilities have not ever been
-played.
+Many, of course, have, in fact, been played (and recorded) before,
+sometime in the long history of the major leagues.  That said, an
+infinitude of remaining possibilities have not ever been played.
 
 Some questions struck us. What's the ``shortest'' half-inning that has
 never occurred in Major League Baseball, but might someday? 
@@ -177,8 +183,18 @@ For this reason, three outs will always be listed as \textbf{XXX} and
 will never be listed with information about the bases, which as far as
 our model is concerned remains irrelevant.
 
-The most unlikely games in baseball's history tend to also be the highest scoring ones. 
-If you ask ``what game from baseball's history would have the smallest probability that the exact same sequence of plays will reappear'' then that game (for the major leagues) would almost certainly be the one on June 28, 1871 (the first season of major league baseball) between [TRO] and [PH1] where 82 points were score.  The final score of that game was 33-49.  Only 53 points were scored in each of three next highest scoring games, all within a year of the highest scoring game.  The more plays in the sequence, the more unlikely that all of them will repeat in the future in that same sequence.
+The most unlikely games in baseball's history tend to also be the
+highest scoring ones.
+If you ask ``what game from baseball's history would have the smallest
+probability that the exact same sequence of plays will reappear'' then
+that game (for the major leagues) would almost certainly be the one on
+June 28, 1871 (the first season of major league baseball) between
+[TRO] and [PH1] where 82 points were score.
+The final score of that game was 33-49.  
+Only 53 points were scored in each of three next highest scoring
+games, all within a year of the highest scoring game.
+The more plays in the sequence, the more unlikely that all of them
+will repeat in the future in that same sequence.
 
 <<load,eval=T,echo=F,cache=F,message=F>>=
 library(RMySQL)
