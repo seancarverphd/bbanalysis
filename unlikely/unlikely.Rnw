@@ -1,34 +1,37 @@
 \documentclass{article}
 \usepackage{setspace}
 \usepackage{tcolorbox}
-\title{The most likely, most unlikely, and possible but unprecedented occurrences in major league baseball history}
+\title{The most likely, most unlikely, and completely unprecedented occurrences in major league baseball history}
 \author{Sean G. Carver and Jake Berberian}
 \doublespace
 \begin{document}
 \SweaveOpts{concordance=TRUE}
 \maketitle
 
-Baseball involves an infinity of possibilities---things that have
-happened before, frequently or infrequently, and things that have
-\emph{never} happened, yet, but someday may.
+Baseball involves an infinity of possibilities---things that \emph{have}
+happened before, frequently or infrequently, and things that
+\emph{have never} happened, to date, but someday may.
 With a mathematical description of what we expect from data, in other
-words, \emph{a model}, we can precisely estimate probabilities of
+words, with a \emph{model}, we can precisely estimate probabilities of
 occurrences happening in the future---occurrences that may have
 already happened in the past (be they commonplace or rare), as well as
-those that have not yet transpired, or, at least, not yet recorded.
-(Our records of what has happened in the past, though extensive,
-remain incomplete.)
+those that have not yet ever transpired.
 
 Baseball is played in epochs called innings and half-innings. 
 We can characterize a half-inning in baseball by the number of plays
-or `at-bats' before three outs advance the game to the next
+or ``at-bats'' before three outs advance the game to the next
 half-inning, or the end of the game. 
 
-With no cap on score, or number of plays, there are infinitely many
-possible half-innings. 
-Many, of course, have, in fact, been played (and recorded) before,
-sometime in the long history of the major leagues.  That said, an
-infinitude of remaining possibilities have not ever been played.
+With no cap on the score, there exists no limit to the number of plays
+that can occur in a half-inning.
+Consequently, there exists infinitely many possible sequences of plays
+that can make up a half-inning in a game of baseball---all of which
+follow the rules of the game.
+Many, of course, have been played before, sometime in the nearly
+150-year history of the major leagues.
+That said, an infinitude of remaining possibilities have not ever been
+played.
+And no matter how long the game is played that must always remain the case.
 
 Some questions struck us. What's the ``shortest'' half-inning that has
 never occurred in Major League Baseball, but might someday? 
