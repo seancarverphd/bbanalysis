@@ -1,0 +1,23 @@
+We contribute a repository of R scripts that construct a MySQL
+database of all freely and readily available data from Major League
+Baseball.  Our database can find use in determining unprecedented
+(meaning never before recorded) occurrences in the game.  To this end,
+we create a simple and easily readable notation for plays in a
+half-inning (see below).  The Markov chain model of baseball allows us
+to compute probabilities for any legal sequence of plays.  For example ...
+
+The "one-two-three" half-inning (in our notation:
+"0:0X:0XX:XXX"---three outs in a row, and no one on base) has the
+highest probability of any half-inning (10^-0.5180987).  The "white
+whale" half-inning ("0:3:23:XXX"---a triple, a double with runner on
+third not advancing, followed by a triple play) has the lowest
+probability of any of the 24 possible 3-play half-innings
+(10^-9.735438).
+
+The database constructed by our scripts faciliatates an exploration of
+the commonplace, the rare, and the unprecedented sequences of play in
+Major League baseball.
+
+See http://github.com/seancarverphd/bbanalysis
+and http://jakeberberian.com
+
