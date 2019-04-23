@@ -1,6 +1,7 @@
 library(RMySQL)
 library(rlist)
 library(stringr)
+source("~/Code/bbanalysis/code/listpaths.R")
 
 con <- dbConnect(MySQL(), user='baseball', password='BabeRuth60!', dbname='retrosheet', 'host'='localhost')
 
@@ -214,14 +215,14 @@ same.half.inning <- function(counter, event) {
   return (counter$inning==event$inning & counter$batting==event$batting_team)
 }
 
-batch.update <- function(list.batch, k, batch.size, table, n, t0, force=FALSE) {
+batch.update <- function(list.batch, k, batch.size, table, n, y, t0, force=FALSE) {
   if (k%%batch.size==0 | force) {
     b <- as.integer(k/batch.size)
     # trim list.batch if not complete (last batch)
     list.batch <- list.batch[1:batch.index(k,batch.size)]
     insert.batch(list.batch, table)
     list.batch <- vector("list", batch.size)
-    print(paste("batch",b,"size",batch.size,"of",n))
+    print(paste("year", y, "batch", b, "size", batch.size, "of", n))
     print(Sys.time() - t0)
   }
   return (list.batch)
@@ -242,7 +243,7 @@ make.year.innings <- function(years, table, batch.size) {
     # Get all games for year
     game.list <- query(paste("SELECT * FROM event_games WHERE year = ", y))
     # Done pulling data print number of innings and games
-    print(paste(n,"innings and", nrow(game.list), "games for year"))
+    print(paste(n,"innings and", nrow(game.list), "games for year", y))
     t0 <- Sys.time()
     k <- 0
     list.batch <- vector("list",batch.size)
@@ -262,6 +263,7 @@ make.year.innings <- function(years, table, batch.size) {
         if (same.half.inning(counter, event)) {  # runs if event continues half.inning
           old_state <- event$old_state
           old_strip <- substr(old_state,1,nchar(old_state)-1)
+          if (!identical(old_strip, overlap)) print(paste("game", game[1,1], "old_strip", old_strip, "overlap", overlap))
           stopifnot(identical(old_strip, overlap))
           new_state <- event$new_state
           sequence <- paste(sequence, new_state, sep='')
@@ -271,7 +273,7 @@ make.year.innings <- function(years, table, batch.size) {
           k <- k+1  # insert previous completed inning into database
           list.batch[[batch.index(k,batch.size)]] <- prepare.insert(table, game, counter$inning, counter$batting, overlap, sequence)
           # print(list.batch[[batch.index(k,batch.size)]])
-          list.batch <- batch.update(list.batch, k, batch.size, table, n, t0, force=FALSE)
+          list.batch <- batch.update(list.batch, k, batch.size, table, n, y, t0, force=FALSE)
           if (is.null(list.batch[[1]])) t0 <- Sys.time()  # if just updated, reset time counter
           new_state <- event$new_state
           sequence <- paste('0',new_state,sep='')
@@ -282,12 +284,14 @@ make.year.innings <- function(years, table, batch.size) {
       k <- k+1  # insert completed last half.inning (in game) into database
       list.batch[[batch.index(k,batch.size)]] <- prepare.insert(table, game, counter$inning, counter$batting, overlap, sequence)
       # print(list.batch[[batch.index(k,batch.size)]])
-      list.batch <- batch.update(list.batch, k, batch.size, table, n, t0, force=FALSE)
+      list.batch <- batch.update(list.batch, k, batch.size, table, n, y, t0, force=FALSE)
       if (is.null(list.batch[[1]])) t0 <- Sys.time()  # if just updated, reset time counter
     }
     stopifnot(k==n)
-    if (!is.null(list.batch[[1]])) batch.update(list.batch, k, batch.size, table, n, t0, force=TRUE)  # if not just updated, update last partial batch
+    if (!is.null(list.batch[[1]])) batch.update(list.batch, k, batch.size, table, n, y, t0, force=TRUE)  # if not just updated, update last partial batch
   }
 }
 
-make.year.innings(1930:2018,"innings",1000)
+redo.innings <- function() {
+  make.year.innings(2013:2018,"innings",1000)
+}
