@@ -1,1 +1,3 @@
-# bbanalysis -- Code for creating a master MySQL database of freely available Baseball data, and analyzing that data.
+# bbanalysis -- Code for creating and analyzing a master MySQL database of freely available Baseball data.
+
+This repository came from a project started by Sean Carver and Jake Berberian to generate interesting insights into the game of Baseball, specifically rare and unprecedented occurrences in Major League play.  We discovered through advancing the project, that our biggest contribution may be in making all of the freely available data easily accessible in one place --- or rather provide R scripts that do that for you on your own servers.  We are including our own derived data sets.  Creating these data sets can take days, but it is all automated.
