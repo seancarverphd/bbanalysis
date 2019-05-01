@@ -249,6 +249,7 @@ make.year.innings <- function(years, table, batch.size) {
     list.batch <- vector("list",batch.size)
     for(i in 1:nrow(game.list)) {
       game <- game.list[i,]
+      if (game[1,1] == 'MIL201304190') next
       # Pull out events for the game
       game.event.list <- subset(year.event.list, game_id==game[1,1])
       # Should already be ordered but just in case
@@ -287,11 +288,11 @@ make.year.innings <- function(years, table, batch.size) {
       list.batch <- batch.update(list.batch, k, batch.size, table, n, y, t0, force=FALSE)
       if (is.null(list.batch[[1]])) t0 <- Sys.time()  # if just updated, reset time counter
     }
-    stopifnot(k==n)
     if (!is.null(list.batch[[1]])) batch.update(list.batch, k, batch.size, table, n, y, t0, force=TRUE)  # if not just updated, update last partial batch
+    stopifnot(k==n)
   }
 }
 
 redo.innings <- function() {
-  make.year.innings(2013:2018,"innings",1000)
+  make.year.innings(2013,"innings",1000)
 }
