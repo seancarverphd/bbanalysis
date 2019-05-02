@@ -8,11 +8,31 @@
 \SweaveOpts{concordance=TRUE}
 \maketitle
 
+<<load, echo=F, message=F>>=
+library(RMySQL)
+library(ggplot2)
+
+con <- dbConnect(MySQL(), user='baseball', password='BabeRuth60!', dbname='retrosheet', 'host'='localhost')
+
+query <- function(...) {
+  dbGetQuery(con, ...)
+}
+@ 
+
+<<numinnings, echo=F, cache=F>>=
+num.distinct.half.innings.integer <- query("SELECT COUNT(DISTINCT(sequence)) FROM innings;")[1,1]
+num.distinct.half.innings <- formatC(num.distinct.half.innings.integer, format="d", big.mark=",")
+@
+
+<<tests, include=F, echo=F, cache=F>>=
+stopifnot(identical(num.distinct.half.innings,'172,872'))
+@ 
+
 Baseball involves an infinity of possibilities---things that \emph{have}
 happened before, frequently or infrequently, and things that
 \emph{have never} happened, to date, but someday may.
 With a mathematical description of what we expect from data, in other
-words, with a \emph{model}, we can precisely estimate probabilities of
+words, with a model, we can precisely estimate probabilities of
 occurrences happening in the future---occurrences that may have
 already happened in the past (be they commonplace or rare), as well as
 those that have not yet ever transpired.
@@ -20,18 +40,19 @@ those that have not yet ever transpired.
 Baseball is played in epochs called innings and half-innings. 
 We can characterize a half-inning in baseball by the number of plays
 or ``at-bats'' before three outs advance the game to the next
-half-inning, or the end of the game. 
+half-inning, if not the end of the game. 
 
 With no cap on the score, there exists no limit to the number of plays
 that can occur in a half-inning.
 Consequently, there exists infinitely many possible sequences of plays
 that can make up a half-inning in a game of baseball---all of which
-follow the rules of the game.
-Many, of course, have been played before, sometime in the nearly
-150-year history of the major leagues.
-That said, an infinitude of remaining possibilities have not ever been
-played.
-And no matter how long the game is played that must always remain the case.
+remain possible following the rules of the game.
+Our extensive database of past played half-innings in the
+major-leagues contains \Sexpr{num.distinct.half.innings} distinct
+sequences.
+That said, an infinitude of remaining possibilities stand
+unprecedented, and for as long the game of baseball persists, that
+infinitude will continue to tantalize us.
 
 Some questions struck us. What's the ``shortest'' half-inning that has
 never occurred in Major League Baseball, but might someday? 
@@ -199,22 +220,15 @@ games, all within a year of the highest scoring game.
 The more plays in the sequence, the more unlikely that all of them
 will repeat in the future in that same sequence.
 
-<<load,eval=T,echo=F,cache=F,message=F>>=
-library(RMySQL)
-library(ggplot2)
-con <- dbConnect(MySQL(), user='baseball', password='BabeRuth60!', dbname='retrosheet', 'host'='localhost')
-
-query <- function(...) {
-  dbGetQuery(con, ...)
-}
-@
-
-
 <<utransfigure,eval=T,echo=F,cache=F>>=
 trans <- query("SELECT * FROM transitions;")
 ostates <- query("SELECT * FROM old_states")
 
 ggplot(data=trans, mapping=aes(x=u_old_state, y=u_conditional, group=transition)) + geom_point()
+@
+
+<<unload, eval=T, echo=F, cache=F>>=
+dbDisconnect(con)
 @
 
 \end{document}
