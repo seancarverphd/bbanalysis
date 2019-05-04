@@ -54,25 +54,48 @@ That said, an infinitude of remaining possibilities stand
 unprecedented, and for as long the game of baseball persists, that
 infinitude will continue to tantalize us.
 
-Some questions struck us. What's the ``shortest'' half-inning that has
-never occurred in Major League Baseball, but might someday? 
-If this half-inning has never occurred, how long from now can we
-expect to wait to see it happen? 
+Some questions struck us.
+What is the ``shortest'' half-inning (in number of plays) that has
+never occurred in Major League Baseball, but might someday?
+This sequence must exist, but it might not be unique.  
+If this or these half-innings have never occurred, what probability
+do they have of occurring in a given half-inning in the future?
+Or a related question: how long from now can we expect to have to wait
+to see them happen?
 Of the half-innings that \emph{have} occurred, which one has the
 lowest probability: i.e.~which half-inning is \emph{the most unlikely
-  half-inning in baseball history}? 
-With a model, we can answer these questions---with substantial help
-from a powerful computer and a large database. 
-We provide a link to our code below and reassure the interested reader
-that most modern laptops are powerful enough to handle our
-calculations, though they require user patience. 
-Our calculations use a well-studied and often used model of baseball
-to answer our questions: baseball's standard Markov chain model.
+  half-inning seen in baseball history}?
+How long can we expect to wait to see this same sequence reappear?
+As the score gets larger, an infinitude of half-innings become less
+and less likely, so there does not exist a \emph{most unlikely}
+half-inning that has \emph{never} been played.
+However, there must be a \emph{most-likely-but-so-far-unprecedented}
+sequence.
+How long from now can we expect to wait to first see this or these
+distinguished half-inning(s)?
+Indeed, how long from the last recorded half-inning can we expect to
+have to wait to see \emph{any one} of the up-to-then-unprecedented
+half-innings?
+Likewise, there must exist a \emph{most likely} half-inning that
+\emph{has} been played---undoubtedly a very common half-inning that
+fans familiar with the game can probably guess. 
+We would not expect to have to wait very long to see this most likely
+half-inning reappear.
+With a model, we can answer all of these questions---with substantial
+help from a computer and a large database---but only the extent that
+the database is complete.
+``Unprecedented'' will mean ``not in our database of half-innings.''
+We derive our database from the vast Retrosheet collection.
+We provide a link to our code below, with the warning that our
+calculations require patience.  
+Our calculations employ a well-studied and often used model of
+baseball to derive answers: baseball's standard Markov chain model.
 
-So what's the shortest inning that has never been played? 
-We'll give this answer now, then review the rules of baseball, explain
-the notation we use, introduce the model, answer our questions, convey
-some fascinating statistics and reveal some compelling visualizations.
+So what's the shortest inning that has never been played?  We'll give
+this answer now, then review the rules of baseball, explain the
+notation we use, introduce the model, answer the rest of our
+questions, convey some fascinating statistics and reveal some
+compelling visualizations.
 
 The shortest half-innings in baseball all have three plays---you need
 at least three `at-bats' to get three outs. 
