@@ -35,12 +35,12 @@ With a mathematical description of what we expect from data, in other
 words, with a model, we can precisely estimate probabilities of
 occurrences happening in the future---occurrences that may have
 already happened in the past (be they commonplace or rare), as well as
-those that have not yet ever transpired.
+those that may not yet have transpired.
 
-Baseball is played in epochs called innings and half-innings. 
-We can characterize a half-inning in baseball by the number of plays
-or ``at-bats'' before three outs advance the game to the next
-half-inning, if not the end of the game. 
+Baseball is played in epochs called innings and half-innings.  
+We can characterize a half-inning in baseball by the results of all
+plays or ``at-bats'' before three outs advance the game to the next
+half-inning---if not the end of the game.
 
 With no cap on the score, there exists no limit to the number of plays
 that can occur in a half-inning.
@@ -50,9 +50,9 @@ remain possible following the rules of the game.
 Our extensive database of past played half-innings in the
 major-leagues contains \Sexpr{num.distinct.half.innings} distinct
 sequences.
-That said, an infinitude of remaining possibilities stand
-unprecedented, and for as long the game of baseball persists, that
-infinitude will continue to tantalize us.
+That said, an infinitude of remaining possibilities stands
+unprecedented, and for as long the game of baseball persists, whatever
+infinitude that must remain will continue to tantalize us.
 
 Some questions struck us.
 What is the ``shortest'' half-inning (in number of plays) that has
@@ -61,35 +61,42 @@ This sequence must exist, but it might not be unique.
 If this or these half-innings have never occurred, what probability
 do they have of occurring in a given half-inning in the future?
 Or a related question: how long from now can we expect to have to wait
-to see them happen?
+to first see each happen?
+
 Of the half-innings that \emph{have} occurred, which one has the
 lowest probability: i.e.~which half-inning is \emph{the most unlikely
-  half-inning seen in baseball history}?
-How long can we expect to wait to see this same sequence reappear?
-As the score gets larger, an infinitude of half-innings become less
-and less likely, so there does not exist a \emph{most unlikely}
-half-inning that has \emph{never} been played.
-However, there must be a \emph{most-likely-but-so-far-unprecedented}
-sequence.
-How long from now can we expect to wait to first see this or these
-distinguished half-inning(s)?
-Indeed, how long from the last recorded half-inning can we expect to
-have to wait to see \emph{any one} of the up-to-then-unprecedented
-half-innings?
-Likewise, there must exist a \emph{most likely} half-inning that
-\emph{has} been played---undoubtedly a very common half-inning that
-fans familiar with the game can probably guess. 
-We would not expect to have to wait very long to see this most likely
-half-inning reappear.
-With a model, we can answer all of these questions---with substantial
-help from a computer and a large database---but only the extent that
-the database is complete.
-``Unprecedented'' will mean ``not in our database of half-innings.''
-We derive our database from the vast Retrosheet collection.
-We provide a link to our code below, with the warning that our
-calculations require patience.  
-Our calculations employ a well-studied and often used model of
-baseball to derive answers: baseball's standard Markov chain model.
+  half-inning seen in major league baseball history}?  How long can we
+expect to wait to see this same sequence reappear?  As the score gets
+larger, half-innings become less likely, so there does not exist a
+\emph{most unlikely possible half-inning}, nor a most unlikely
+half-inning that has \emph{never} been played.  However, there must
+exist one (or more) \emph{most-likely-possible} half-inning(s), as
+well as one (or more) that remains
+\emph{most-likely-among-the-so-far-unprecedented}-half-innings.  How
+long from now can we expect to wait to first see each of these
+distinguished half-innings?  Though the \emph{most likely possible}
+half-inning should repeat frequently enough to allow fans a correct
+guess, we will nevertheless, still reveal the answer, and show that we
+will not have to wait very long to see it reappear in the baseball
+records.  Presumably, we would have to wait a while to see a
+particular so-far-unprecedented half-inning, even the
+\emph{most-likely} among that set, discussed above, as we have already
+waited the entire history of the game and have not yet seen it.
+That said, it should take quite a bit less time to see
+\emph{any one of these unprecedented half-innings}?  How long?
+
+With a model, we can, and will, reveal the answers to all of these
+questions.  
+Getting these answers came with substantial help from a computer and a
+large database.
+Indeed, our answers have validity only to the extent that our database
+stands complete.
+Thus when we say ``unprecedented,'' we really mean ``not in our database of
+half-innings,'' derived from the public record, including other databases. 
+To allow for the reproduction of our results, we provide a link to our
+code below (but warn the user that these calculations require patience).
+To this end, we use a well-studied and often employed model of
+baseball called baseball's Markov chain model.
 
 So what's the shortest inning that has never been played?  We'll give
 this answer now, then review the rules of baseball, explain the
@@ -100,16 +107,31 @@ compelling visualizations.
 The shortest half-innings in baseball all have three plays---you need
 at least three `at-bats' to get three outs. 
 These half-innings (and all other half-innings, for that matter) start
-with bases empty, and no outs \textbf{0}. 
-While all the individual plays listed here have occurred before, the
-following exact sequence of plays never has. 
-We call this half-inning the ``white whale:'' first a triple,
-\textbf{0:3}, second, a double with the runner on third not advancing,
-\textbf{0:3:23}, and third, a triple-play (three outs),
-\textbf{0:3:23:XXX}. 
-That minimally short inning has never been seen in the major leagues,
-or at least cannot be found in the vast Retrosheet event data set,
-covering 1930 to 2018.
+with bases empty, and no outs, a state we denote \textbf{0}. 
+While the individual plays listed here have all occurred before, the
+exact sequence of plays that follows never has: we call this
+half-inning the ``white whale;'' it is the most unlikely of only
+two unprecedented (out of 24 total) three-play half-innings.
+
+The first play of the white whale is a triple, leading to a transition
+which we denote \textbf{0:3}.  This transition is the most uncommon
+way to start a half-inning among five possibilities: single, double,
+triple, home run, and out.  
+
+The next two transitions are among the rarest possible---they have
+only occurred, respectively, 6 times, and 7 times, in the whole
+history of the game (according to our database).
+The second play is a double with the stipulation that the runner on
+third does not advance.  
+This transition is rare because when the batter advances to second
+base, typically a runner on third can also advance.
+We denote the full sequence, so far, as \textbf{0:3:23}.  
+The third and last play is an exceedingly rare triple-play (three
+outs).  We denote the full half-inning as: \textbf{0:3:23:XXX}. 
+
+The other half-inning that has never appeared in the history of the
+game has the sequence \textbf{0:3:13:XXX}.  We show the full list of
+legal three-play half-innings in Table 1.
 
 Now let's back up and review the rules of the game.
 
@@ -145,7 +167,7 @@ That adjustment should bring the number closer to 17.5, however, if
 the score is tied at the end of the ninth inning, extra innings are
 played to break the tie (for a total of more than 18 half-innings for
 the game).
-Finally in exceptional circumstances, the referee may call the game
+Finally in exceptional circumstances, the umpire may call the game
 early (perhaps resulting in fewer than 17 half-innings in the game).
 
 In each half-inning, one team tries to score, and the other defends.
