@@ -45,14 +45,15 @@ half-inning---if not the end of the game.
 With no cap on the score, there exists no limit to the number of plays
 that can occur in a half-inning.
 Consequently, there exists infinitely many possible sequences of plays
-that can make up a half-inning in a game of baseball---all of which
-remain possible following the rules of the game.
+within each epoch---all of which remain possible following the rules
+of the game.
 Our extensive database of past played half-innings in the
 major-leagues contains \Sexpr{num.distinct.half.innings} distinct
 sequences.
-That said, an infinitude of remaining possibilities stands
+That said, an infinitude of remaining possibilities still stands
 unprecedented, and for as long the game of baseball persists, whatever
-infinitude that must remain will continue to tantalize us.
+infinitude that must always remain unplayed will continue to tantalize
+us.
 
 Some questions struck us.
 What is the ``shortest'' half-inning (in number of plays) that has
@@ -63,27 +64,47 @@ do they have of occurring in a given half-inning in the future?
 Or a related question: how long from now can we expect to have to wait
 to first see each happen?
 
-Of the half-innings that \emph{have} occurred, which one has the
-lowest probability: i.e.~which half-inning is \emph{the most unlikely
-  half-inning seen in major league baseball history}?  How long can we
-expect to wait to see this same sequence reappear?  As the score gets
-larger, half-innings become less likely, so there does not exist a
-\emph{most unlikely possible half-inning}, nor a most unlikely
-half-inning that has \emph{never} been played.  However, there must
-exist one (or more) \emph{most-likely-possible} half-inning(s), as
-well as one (or more) that remains
-\emph{most-likely-among-the-so-far-unprecedented}-half-innings.  How
-long from now can we expect to wait to first see each of these
-distinguished half-innings?  Though the \emph{most likely possible}
-half-inning should repeat frequently enough to allow fans a correct
-guess, we will nevertheless, still reveal the answer, and show that we
-will not have to wait very long to see it reappear in the baseball
-records.  Presumably, we would have to wait a while to see a
-particular so-far-unprecedented half-inning, even the
-\emph{most-likely} among that set, discussed above, as we have already
-waited the entire history of the game and have not yet seen it.
-That said, it should take quite a bit less time to see
-\emph{any one of these unprecedented half-innings}?  How long?
+
+\begin{tcolorbox}
+\textbf{Questions:}
+
+What are the sequence(s) and expected wait time(s) for
+
+\begin{enumerate}
+\item ...the ``shortest'' half-inning(s) not yet played?''
+\item ...the ``most unlikely'' half-inning(s) played?
+\item ...the ``most likely'' half-inning(s) played?
+\item ...the ``most likely'' half-inning(s) not yet played?
+\item What is the expected wait time for the next new sequence?
+\end{enumerate}
+\end{tcolorbox}
+
+Of the finite number of half-innings that \emph{have} occurred, which
+has (or have) the lowest probability: i.e.~which half-inning(s) is
+(are) \emph{the most unlikely half-inning(s) seen in major league
+  baseball history}?
+How long can we expect to wait to see this (or these) same sequences
+first reappear?
+As the score gets larger, half-innings become less likely, so there
+does not exist a \emph{most unlikely half-inning possible}, nor a
+\emph{most unlikely half-inning possible among those that never appeared}.
+On the other hand, there must exist one (or more)
+most-\emph{likely}-possible half-inning(s), as well as one (or more)
+\emph{most-likely-among-the-so-far-unprecedented}.
+How long from now can we expect to wait to first see each of these
+distinguished half-innings?
+Though the \emph{most likely among all possible} half-inning should repeat
+frequently enough to allow fans a correct guess, we will nevertheless,
+still reveal the answer, and show that we will not have to wait very
+long to see it first reappear in the baseball records.  
+Presumably, we would have to wait \emph{much} longer to see a particular
+so-far-unprecedented half-inning, even the one found to be
+\emph{most-likely} among that set.  
+Indeed, we have already waited the entire history of the game without
+an appearance.
+On the other hand, it should take quite a bit less time to first see
+\emph{any one among all so far unprecedented half-innings}?  
+But how long?
 
 With a model, we can, and will, reveal the answers to all of these
 questions.  
