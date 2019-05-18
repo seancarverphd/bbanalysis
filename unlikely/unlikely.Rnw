@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage{setspace}
 \usepackage{tcolorbox}
-\title{The most likely, most unlikely, and completely unprecedented occurrences in major league baseball history}
+\title{The most likely, most unlikely, and completely unprecedented occurrences in Major League Baseball history}
 \author{Sean G. Carver and Jake Berberian}
 \doublespace
 \begin{document}
@@ -62,73 +62,123 @@ This sequence must exist, but it might not be unique.
 If this or these half-innings have never occurred, what probability
 do they have of occurring in a given half-inning in the future?
 Or a related question: how long from now can we expect to have to wait
-to first see each happen?
+to first see each happen (i.e. the expected wait time)?
 
 
 \begin{tcolorbox}
 \textbf{Questions:}
 
-What are the sequence(s) and expected wait time(s) for
+What are the sequences, probabilities, and expected wait times for ...
 
+\singlespacing
 \begin{enumerate}
 \item ...the ``shortest'' half-inning(s) not yet played?''
 \item ...the ``most unlikely'' half-inning(s) played?
-\item ...the ``most likely'' half-inning(s) played?
+\item ...the ``most likely'' half-inning(s) possible?
 \item ...the ``most likely'' half-inning(s) not yet played?
 \item What is the expected wait time for the next new sequence?
 \end{enumerate}
+\doublespacing
+
 \end{tcolorbox}
 
-Of the finite number of half-innings that \emph{have} occurred, which
-has (or have) the lowest probability: i.e.~which half-inning(s) is
-(are) \emph{the most unlikely half-inning(s) seen in major league
-  baseball history}?
-How long can we expect to wait to see this (or these) same sequences
-first reappear?
-As the score gets larger, half-innings become less likely, so there
-does not exist a \emph{most unlikely half-inning possible}, nor a
-\emph{most unlikely half-inning possible among those that never appeared}.
-On the other hand, there must exist one (or more)
-most-\emph{likely}-possible half-inning(s), as well as one (or more)
-\emph{most-likely-among-the-so-far-unprecedented}.
-How long from now can we expect to wait to first see each of these
-distinguished half-innings?
-Though the \emph{most likely among all possible} half-inning should repeat
-frequently enough to allow fans a correct guess, we will nevertheless,
-still reveal the answer, and show that we will not have to wait very
-long to see it first reappear in the baseball records.  
-Presumably, we would have to wait \emph{much} longer to see a particular
-so-far-unprecedented half-inning, even the one found to be
-\emph{most-likely} among that set.  
-Indeed, we have already waited the entire history of the game without
-an appearance.
-On the other hand, it should take quite a bit less time to first see
-\emph{any one among all so far unprecedented half-innings}?  
-But how long?
-
-With a model, we can, and will, reveal the answers to all of these
-questions.  
-Getting these answers came with substantial help from a computer and a
-large database.
-Indeed, our answers have validity only to the extent that our database
-stands complete.
-Thus when we say ``unprecedented,'' we really mean ``not in our database of
-half-innings,'' derived from the public record, including other databases. 
+With a model (we use baseball's so-called Markov chain model), we
+can, and will, reveal the answers to all of these questions.
+Our answers derive from data---with substantial help from a computer and a
+large database---but only have validity to the extent that the database
+stands as a complete record of baseball history.
+When we say ``unprecedented,'' we really mean ``not in our database of
+half-innings.''
 To allow for the reproduction of our results, we provide a link to our
 code below (but warn the user that these calculations require patience).
-To this end, we use a well-studied and often employed model of
-baseball called baseball's Markov chain model.
 
-So what's the shortest inning that has never been played?  We'll give
-this answer now, then review the rules of baseball, explain the
-notation we use, introduce the model, answer the rest of our
-questions, convey some fascinating statistics and reveal some
-compelling visualizations.
+So what's the shortest inning that has never been played?  
+The shortest half-innings start (as do all half-innings)
+with bases empty and no outs, a state we denote \textbf{0}. 
+Likewise, the final state of all complete half-innings is simply
+``three outs,'' denoted \textbf{XXX}.
+According to the rules of the game, this state ends the half-inning.
+But a half-inning---not played to completion---can end on another
+state.
+For example, during the last epoch of the game, if the batting
+team clinches a win by exceeding the score of the other team, the last
+half-inning played, and the whole game, comes to an abrupt end.
+But we exclude all such incomplete half-innings from the designation
+``shortest.''
+Likewise, we exclude play-sequences that are not possible, based on
+baseball's rules.
 
-The shortest half-innings in baseball all have three plays---you need
-at least three `at-bats' to get three outs. 
-These half-innings (and all other half-innings, for that matter) start
-with bases empty, and no outs, a state we denote \textbf{0}. 
+There exists no way of connecting \textbf{0} with \textbf{XXX} with
+fewer than three plays---you need at least three `at-bats' to get
+three outs.
+On the other hand, depending on how you count them, there can exists
+countlessly many trajectories for a half-inning to get from \textbf{0}
+to \textbf{XXX} in exactly three plays.
+That said, baseball's Markov chain model does not care how the ball is
+pitched, nor how it's hit, nor who fields it, nor how the players
+otherwise engage throughout the game.
+Baseball's Markov chain model cares and records only which bases have
+runners at the start of each play, how many outs occur in each play,
+and how many outs occurred previously in the same half-inning.
+
+With this model, there exists only 24 possible ways to get
+from \textbf{0} to \textbf{XXX} in three plays---the 24-way tie for
+the shortest possible complete half-inning in game of baseball.  
+Table 1 lists these possibilities, with the notation explained in the
+next paragraphs.
+
+\begin{tcolorbox}
+\textbf{Notation for states:}
+
+Because a baseball diamond has three bases, there are $2^3$
+possibilities for which bases have runners at the start of a play.
+These 8 possibilities are denoted 
+
+\singlespacing
+\begin{itemize}
+\item \textbf{0}: bases empty,
+\item \textbf{1}: runner only on first,
+\item \textbf{2}: runner only on second,
+\item \textbf{3}: runner only on third,
+\item \textbf{12}: runners on first and second, but not third,
+\item \textbf{13}: runners on first and third, but not second,
+\item \textbf{23}: runners on second and third, but not first,
+\item \textbf{123}: bases loaded.
+\end{itemize}
+\doublespacing
+The above notation, based on our convention, would also indicate that
+there have been no outs so far in the half-inning.
+For a different situation, use the same notation for bases, but append
+an \textbf{X} or \textbf{XX}, respectively, for one or two previous
+outs.
+Finally, use the notation \textbf{XXX}, without indicating which bases have
+runners, to denote ``three outs.''
+\end{tcolorbox}
+
+Counting both the base configurations and out configurations, there
+are 24 states ($8 \times 3$) from which the half-inning will continue, and
+one more from which it cannot.  
+In Markov chain terminology, we call the 24 states, \emph{transient},
+and the final state, \emph{absorbing}: Markov chains eventually leave
+their transient states for their absorbing states, and never return.
+
+We define only one absorbing state (``three outs,'' or \textbf{XXX}),
+because the half-inning ends at this point, regardless of what bases
+have runners.
+That said, the available data include the offensive player's---i.e.~batter's
+and runners'---base destinations on all plays including the last.
+For this reason, it would be possible to have several absorbing states
+in baseball that include the base destinations on the final play.
+Making this inclusion would make it always possible to infer the points
+scored in the half-inning from the sequence of plays.
+The published versions of the Markov chain model that we have seen do not
+pose the model this way, and neither do we, apparently because it makes the
+half-innings harder to read.
+Unfortunately, this means we cannot tell from the sequences of states
+how many points the batting team scored on the last play.
+We have this information elsewhere, but for our questions above, the
+score remains irrelevant, and we need not pay attention to it.
+
 While the individual plays listed here have all occurred before, the
 exact sequence of plays that follows never has: we call this
 half-inning the ``white whale;'' it is the most unlikely of only
