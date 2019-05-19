@@ -130,9 +130,9 @@ next paragraphs.
 \begin{tcolorbox}
 \textbf{Notation for states:}
 
-Because a baseball diamond has three bases, there are $2^3$
+Because a baseball diamond has three bases, there exists $2^3$
 possibilities for which bases have runners at the start of a play.
-These 8 possibilities are denoted 
+These 8 possibilities we denote as follows: 
 
 \singlespacing
 \begin{itemize}
@@ -148,10 +148,10 @@ These 8 possibilities are denoted
 \doublespacing
 The above notation, based on our convention, would also indicate that
 there have been no outs so far in the half-inning.
-For a different situation, use the same notation for bases, but append
+For a different situation, we use the same notation for bases, but append
 an \textbf{X} or \textbf{XX}, respectively, for one or two previous
 outs.
-Finally, use the notation \textbf{XXX}, without indicating which bases have
+Finally, we use the notation \textbf{XXX}, without indicating which bases have
 runners, to denote ``three outs.''
 \end{tcolorbox}
 
