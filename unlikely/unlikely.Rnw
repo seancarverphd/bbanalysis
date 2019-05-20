@@ -158,26 +158,25 @@ runners, to denote ``three outs.''
 Counting both the base configurations and out configurations, there
 are 24 states ($8 \times 3$) from which the half-inning will continue, and
 one more from which it cannot.  
-In Markov chain terminology, we call the 24 states, \emph{transient},
+In Markov chain terminology, we call these 24 states, \emph{transient},
 and the final state, \emph{absorbing}: Markov chains eventually leave
 their transient states for their absorbing states, and never return.
 
 We define only one absorbing state (``three outs,'' or \textbf{XXX}),
 because the half-inning ends at this point, regardless of what bases
 have runners.
-That said, the available data include the offensive player's---i.e.~batter's
-and runners'---base destinations on all plays including the last.
-For this reason, it would be possible to have several absorbing states
-in baseball that include the base destinations on the final play.
-Making this inclusion would make it always possible to infer the points
-scored in the half-inning from the sequence of plays.
+That said, the available data include the offensive players'---i.e.~batter's
+and runners'---base destinations on all plays---including the last.
+For this reason, it would be possible to assign several absorbing states
+to our model to indicate the runners' base destinations on the final play.
+This inclusion would make it possible to infer the points scored on
+the last play from the sequence of states, something which always
+remains possible with other plays, but not always with the last play,
+using the more abbreviated \textbf{XXX} notation.
 The published versions of the Markov chain model that we have seen do not
-pose the model this way, and neither do we, apparently because it makes the
-half-innings harder to read.
-Unfortunately, this means we cannot tell from the sequences of states
-how many points the batting team scored on the last play.
-We have this information elsewhere, but for our questions above, the
-score remains irrelevant, and we need not pay attention to it.
+pose the model in this way, and neither do we.  
+We feel that the more explicit notation makes the sequence of plays
+harder to read and adds unhelpful complexity to the problems.
 
 While the individual plays listed here have all occurred before, the
 exact sequence of plays that follows never has: we call this
