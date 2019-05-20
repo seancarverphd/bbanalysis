@@ -51,7 +51,7 @@ Our extensive database of past played half-innings in the
 major-leagues contains \Sexpr{num.distinct.half.innings} distinct
 sequences.
 That said, an infinitude of remaining possibilities still stands
-unprecedented, and for as long the game of baseball persists, whatever
+unprecedented, and for as long the game of baseball endures, whatever
 infinitude that must always remain unplayed will continue to tantalize
 us.
 
@@ -76,7 +76,7 @@ What are the sequences, probabilities, and expected wait times for ...
 \item ...the ``most unlikely'' half-inning(s) played?
 \item ...the ``most likely'' half-inning(s) possible?
 \item ...the ``most likely'' half-inning(s) not yet played?
-\item What is the expected wait time for the next new sequence?
+\item ...the next ``new'' sequence (we won't know the sequence)?
 \end{enumerate}
 \doublespacing
 
