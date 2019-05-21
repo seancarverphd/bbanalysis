@@ -1,11 +1,18 @@
 library(stringr)
+source('~/Code/bbanalysis/code/utransfigure.R')
+
+ttable <- query("SELECT * FROM transitions")
+row.names(ttable) <- ttable$transition
+t0table <- data.frame(transition="3XX:23XX", count_transition=0, u_conditional=Inf, old_state="3XX", count_old_state=183472, u_old_state=1.814434)
+row.names(t0table) <- t0table$transition
+t0 = rbind(ttable,t0table)
 
 count.half.innings <- function(n) {
   return(length(list.half.innings(n)))
 }
 
 list.half.innings <- function(n) {
-  paths <- list.paths.n(n)
+  paths <- list.paths(n)
   return(paths[grepl('XXX', paths)])
 }
 
@@ -19,6 +26,41 @@ unplayed.half.innings <- function(n) {
   played.n <- played.half.innings(n)
   stopifnot(length(setdiff(played.n,listed.n))==0)
   return(setdiff(listed.n,played.n))
+}
+
+get.batter.transitions <- function(inning) {
+  states <- strsplit(inning,'[:.]')
+  old_states <- states[[1]][-length(states[[1]])]
+  new_states <- states[[1]][-1]
+  punct <- punctuations(inning)
+  n <- length(old_states)
+  transitions <- rep('',str_count(inning,':'))
+  index = 0
+  for (i in 1:n) {
+    if (identical(punct[i],":")) {
+      index = index + 1
+      transitions[index] <- paste(old_states[i],punct[i],new_states[i],sep='')
+    }
+  }
+  return(transitions)
+}
+
+punctuations <- function(inning) {
+  p <- strsplit(inning,'[0123X]')  # creates a list p[[1]] is something like '','','',':','','','.' 
+  return (p[[1]][!p[[1]] %in% c('')])  # removes the '' from p[[1]]
+}
+
+get.transitions <- function(inning) {
+  states <- strsplit(inning,'[:.]')
+  old_states <- states[[1]][-length(states[[1]])]
+  new_states <- states[[1]][-1]
+  punct <- punctuations(inning)
+  n <- length(old_states)
+  transitions <- rep('',n)
+  for (i in 1:n) {
+    transitions[i] <- paste(old_states[i],punct[i],new_states[i],sep='')
+  }
+  return(transitions)
 }
 
 get.u.inning <- function(inning) {
@@ -42,7 +84,17 @@ sequence.df <- function(n) {
   stopifnot(length(setdiff(played.n,listed.n))==0)
   unlikeliness <- unlist(lapply(listed.n,get.u.inning))
   played <- is.element(listed.n, played.n)
-  return(data.frame(sequence=listed.n, played=played, u_sequence=unlikliness))
+  return(data.frame(sequence=listed.n, played=played, u_sequence=unlikeliness, n=rep(n,length(listed.n)), stringsAsFactors = FALSE))
+}
+
+sequence.df.range <- function(r) {
+  df <- data.frame(sequence=character(),played=logical(),u_sequence=double(), n=integer(), stringsAsFactors = FALSE)
+  for (n in r) df <- rbind(df, sequence.df(n))
+  return(df)
+}
+
+innings.plot <- function(df) {
+  ggplot(data=df, mapping=aes(x=u_sequence, y=n, color=played)) + geom_jitter()
 }
 
 list.paths <- function(n) {
@@ -54,7 +106,7 @@ list.paths <- function(n) {
     return ('0')  # base of recursion
   }
   else {
-    paths <- list.paths.n(n-1)
+    paths <- list.paths(n-1)
     more.paths <- c()
     for (p in paths) {
       next.paths <- continue.inning(p)

@@ -19,47 +19,6 @@ query <- function(...) {
   dbGetQuery(con, ...)
 }
 
-ttable <- query("SELECT * FROM transitions")
-row.names(ttable) <- ttable$transition
-t0table <- data.frame(transition="3XX:23XX", count_transition=0, u_conditional=Inf, old_state="3XX", count_old_state=183472, u_old_state=1.814434)
-row.names(t0table) <- t0table$transition
-t0 = rbind(ttable,t0table)
-
-punctuations <- function(inning) {
-  p <- strsplit(inning,'[0123X]')  # creates a list p[[1]] is something like '','','',':','','','.' 
-  return (p[[1]][!p[[1]] %in% c('')])  # removes the '' from p[[1]]
-}
-
-get.transitions <- function(inning) {
-  states <- strsplit(inning,'[:.]')
-  old_states <- states[[1]][-length(states[[1]])]
-  new_states <- states[[1]][-1]
-  punct <- punctuations(inning)
-  n <- length(old_states)
-  transitions <- rep('',n)
-  for (i in 1:n) {
-    transitions[i] <- paste(old_states[i],punct[i],new_states[i],sep='')
-  }
-  return(transitions)
-}
-
-get.batter.transitions <- function(inning) {
-  states <- strsplit(inning,'[:.]')
-  old_states <- states[[1]][-length(states[[1]])]
-  new_states <- states[[1]][-1]
-  punct <- punctuations(inning)
-  n <- length(old_states)
-  transitions <- rep('',str_count(inning,':'))
-  index = 0
-  for (i in 1:n) {
-    if (identical(punct[i],":")) {
-      index = index + 1
-      transitions[index] <- paste(old_states[i],punct[i],new_states[i],sep='')
-    }
-  }
-  return(transitions)
-}
-
 check.year.games <- function(years) {
   for (y in years) {
     print(y)
