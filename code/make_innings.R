@@ -60,21 +60,6 @@ get.batter.transitions <- function(inning) {
   return(transitions)
 }
 
-get.u.inning <- function(inning) {
-  transitions <- get.batter.transitions(inning)
-  nontransitions <- setdiff(transitions,all.transitions())
-  if (length(nontransitions>0)) {
-    print(transitions)
-    #print(nontransitions)
-  }
-  stopifnot(length(nontransitions)==0)  # Will throw error if any non-transitions
-  u <- 0
-  for (transition in transitions) {
-    u <- u + t0[transition,]$u_conditional
-  }
-  return(u)
-}
-
 check.year.games <- function(years) {
   for (y in years) {
     print(y)

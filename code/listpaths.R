@@ -1,14 +1,51 @@
 library(stringr)
 
-count.half.innings.n <- function(n) {
-  return(length(list.half.innings.n(n)))
+count.half.innings <- function(n) {
+  return(length(list.half.innings(n)))
 }
 
-list.half.innings.n <- function(n) {
+list.half.innings <- function(n) {
   paths <- list.paths.n(n)
   return(paths[grepl('XXX', paths)])
 }
-list.paths.n <- function(n) {
+
+played.half.innings <- function(n) {
+  q <- paste('SELECT DISTINCT(sequence) FROM innings WHERE LENGTH(sequence)-LENGTH(REPLACE(sequence,":","")) =',n,'AND LENGTH(sequence)=LENGTH(REPLACE(sequence,".","")) AND finalxxx=TRUE;')
+  return(query(q)$sequence)
+}
+
+unplayed.half.innings <- function(n) {
+  listed.n <- list.half.innings(n)
+  played.n <- played.half.innings(n)
+  stopifnot(length(setdiff(played.n,listed.n))==0)
+  return(setdiff(listed.n,played.n))
+}
+
+get.u.inning <- function(inning) {
+  transitions <- get.batter.transitions(inning)
+  nontransitions <- setdiff(transitions,all.transitions())
+  if (length(nontransitions>0)) {
+    print(transitions)
+    #print(nontransitions)
+  }
+  stopifnot(length(nontransitions)==0)  # Will throw error if any non-transitions
+  u <- 0
+  for (transition in transitions) {
+    u <- u + t0[transition,]$u_conditional
+  }
+  return(u)
+}
+
+sequence.df <- function(n) {
+  listed.n <- list.half.innings(n)
+  played.n <- played.half.innings(n)
+  stopifnot(length(setdiff(played.n,listed.n))==0)
+  unlikeliness <- unlist(lapply(listed.n,get.u.inning))
+  played <- is.element(listed.n, played.n)
+  return(data.frame(sequence=listed.n, played=played, u_sequence=unlikliness))
+}
+
+list.paths <- function(n) {
   # recursive function to add n states onto n-1 states
   n <- as.integer(n) # coerce to integer
   stopifnot(n >= 0)
