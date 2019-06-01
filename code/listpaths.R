@@ -97,6 +97,10 @@ innings.plot <- function(df) {
   ggplot(data=df, mapping=aes(x=u_sequence, y=n, color=played)) + geom_jitter()
 }
 
+bcard.plot <- function(df) {
+  ggplot(data=df, mapping=aes(x=u_sequence, y=n, color=played)) + geom_jitter() + theme_bw() + theme(legend.position="none", axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank(),axis.title.y=element_blank(), axis.text.y=element_blank(), axis.ticks.y=element_blank() )
+}
+
 list.paths <- function(n) {
   # recursive function to add n states onto n-1 states
   n <- as.integer(n) # coerce to integer
