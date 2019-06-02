@@ -7,6 +7,7 @@ t0table <- data.frame(transition="3XX:23XX", count_transition=0, u_conditional=I
 row.names(t0table) <- t0table$transition
 t0 = rbind(ttable,t0table)
 
+# return the count of the possible half innings
 count.half.innings <- function(n) {
   return(length(list.half.innings(n)))
 }
