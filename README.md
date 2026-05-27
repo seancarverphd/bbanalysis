@@ -20,7 +20,7 @@ This project builds a comprehensive MySQL database from publicly available MLB d
 
 - Of the **293 possible Markov chain transitions** between half-inning states, exactly **1 has never occurred** in MLB data going back to 1930 — a result that makes intuitive sense to knowledgeable baseball fans.
 - Unprecedented *half-innings* are abundant (infinitely many, since there is no cap on score). The more interesting question is which transitions and short sequences have never been played.
-- Of the **24 possible three-transition half-innings**, 2 have never been played in MLB history. This is explored in a visualization in the 2019 conference talk.
+- Of the **24 possible three-transition half-innings**, 2 have never been played in MLB history.
 - See also `UnprecedentedHalfInnings.pdf` in this repository.
 
 ---
@@ -36,7 +36,7 @@ This project builds a comprehensive MySQL database from publicly available MLB d
 
 ---
 
-## Presentations
+## Presentation
 
 ### Recruitment Talk: "Novelty in Baseball" (September 11, 2018)
 
@@ -45,13 +45,7 @@ Presented to prospective students at American University as a recruitment demons
 - **Slides:** [novelty.html](https://baseball.seancarver.org/novelty.html#1) (R Markdown / ioslides format)
   - *Navigation: Use arrow keys or click to advance slides.*
 - **Slides (Google Slides version):** [View on Google Slides](https://docs.google.com/presentation/d/1x8mnnAsHXP4QjVIb4MJI_wgi7RvkU5idcWsvum42Cek/edit?usp=sharing)
-
-### Conference Talk: "Major League Markov Chains" (2019)
-
-Presented at a statistics/data science conference in 2019, extending the Markov chain analysis of baseball state transitions.
-
-- **Slides:** `Major League Markov Chains.Rmd` (in this repository)
-  - *Navigation: Slides auto-advance when presented; viewers can also use arrow keys or click to navigate.*
+  - *Navigation: Use arrow keys or click to advance slides.*
 
 ---
 
@@ -64,7 +58,7 @@ bbanalysis/
 ├── nessis19/       # NESSIS 2019 conference materials
 ├── teamcloud/      # Team-level word cloud analysis
 ├── unlikely/       # Unlikely/unprecedented event detection
-├── Major League Markov Chains.Rmd  # 2019 talk slides
+├── Major League Markov Chains.Rmd  # 2019 talk slides (uncompiled)
 ├── UnprecedentedHalfInnings.pdf    # Key findings document
 └── README.md
 ```
