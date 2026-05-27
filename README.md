@@ -32,7 +32,7 @@ This project builds a comprehensive MySQL database from publicly available MLB d
 - **Visualization:** `ggplot2`, word clouds (`wordcloud` package), Markov chain diagrams
 - **Statistical analysis:** Markov chain modeling, transition probability estimation, novelty scoring
 - **Reproducible research:** R Markdown (`.Rmd`) for slides and analysis
-- **Data sourcing:** Freely available MLB data via [Lahman database](https://github.com/maxtoki/baseball_R/)
+- **Data sourcing:** [Retrosheet](https://www.retrosheet.org) play-by-play data (freely available)
 
 ---
 
@@ -67,7 +67,7 @@ bbanalysis/
 
 ## Data
 
-Baseball data is sourced from the [Lahman baseball database via R](https://github.com/maxtoki/baseball_R/). Place data files in the appropriate directories before running analysis scripts.
+Baseball play-by-play data is sourced from [Retrosheet](https://www.retrosheet.org), which provides freely available play-by-play records for all MLB seasons. The data is loaded into a local MySQL database (`retroplays`) for analysis.
 
 ---
 
