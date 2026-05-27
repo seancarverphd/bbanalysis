@@ -36,7 +36,7 @@ This project builds a comprehensive MySQL database from publicly available MLB d
 
 ---
 
-## Presentation
+## Presentations
 
 ### Recruitment Talk: "Novelty in Baseball" (September 11, 2018)
 
@@ -46,6 +46,12 @@ Presented to prospective students at American University as a recruitment demons
   - *Navigation: Use arrow keys or click to advance slides.*
 - **Slides (Google Slides version):** [View on Google Slides](https://docs.google.com/presentation/d/1x8mnnAsHXP4QjVIb4MJI_wgi7RvkU5idcWsvum42Cek/edit?usp=sharing)
   - *Navigation: Use arrow keys or click to advance slides.*
+
+### "Major League Markov Chains" (in progress)
+
+A second talk presenting the research findings and visualizations from this project, including the transition heatmap and analysis of never-played sequences. Source file is in this repository; a compiled version has not yet been produced.
+
+- **Source:** `Major League Markov Chains.Rmd` (in this repository)
 
 ---
 
@@ -58,7 +64,7 @@ bbanalysis/
 ├── nessis19/       # NESSIS 2019 conference materials
 ├── teamcloud/      # Team-level word cloud analysis
 ├── unlikely/       # Unlikely/unprecedented event detection
-├── Major League Markov Chains.Rmd  # 2019 talk slides (uncompiled)
+├── Major League Markov Chains.Rmd  # Second talk (uncompiled)
 ├── UnprecedentedHalfInnings.pdf    # Key findings document
 └── README.md
 ```
