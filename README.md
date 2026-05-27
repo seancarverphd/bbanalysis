@@ -5,16 +5,23 @@
 Code for creating and analyzing a master MySQL database of freely available baseball data, with a focus on detecting rare and unprecedented occurrences in Major League Baseball.
 
 **Author:** Sean Carver, PhD (Applied Mathematics, Cornell; Professorial Lecturer, American University)
-**Collaborator:** Jake Berberian (contributed to project development)
+**Collaborator:** Jake Berberian — collaborated throughout the 2018–19 academic year, contributing baseball domain expertise.
 **License:** GPL-3.0
 
 ---
 
 ## Project Summary
 
-This project builds a comprehensive MySQL database from publicly available MLB data and applies statistical analysis in R to identify genuinely novel, unprecedented events in baseball history. Work on the project began in Fall 2018, with preliminary material prepared during Summer 2018.
+This project builds a comprehensive MySQL database from publicly available MLB data and applies statistical analysis in R to identify which Markov chain transitions between half-inning states (defined by runners on base and number of outs) have never occurred in MLB history. Preliminary results were produced in Summer 2018 and presented in a recruitment talk that September. The core of the work was done in collaboration with Jake Berberian, who joined the project in Fall 2018 and worked throughout the academic year, contributing baseball domain expertise.
 
-The core finding: what looks unprecedented often is not — but the analysis reveals which events truly are statistically rare. The project produces word cloud and Markov chain visualizations to characterize baseball state transitions.
+---
+
+## Key Findings
+
+- Of the **293 possible Markov chain transitions** between half-inning states, exactly **1 has never occurred** in MLB data going back to 1930 — a result that makes intuitive sense to knowledgeable baseball fans.
+- Unprecedented *half-innings* are abundant (infinitely many, since there is no cap on score). The more interesting question is which transitions and short sequences have never been played.
+- Of the **24 possible three-transition half-innings**, 2 have never been played in MLB history. This is explored in a visualization in the 2019 conference talk.
+- See also `UnprecedentedHalfInnings.pdf` in this repository.
 
 ---
 
