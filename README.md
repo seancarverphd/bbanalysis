@@ -38,20 +38,8 @@ This project builds a comprehensive MySQL database from publicly available MLB d
 
 ## Presentations
 
-### Recruitment Talk: "Novelty in Baseball" (September 11, 2018)
-
-Presented to prospective students at American University as a recruitment demonstration of data science methods applied to baseball.
-
-- **Slides:** [novelty.html](https://baseball.seancarver.org/novelty.html#1) (R Markdown / ioslides format)
-  - *Navigation: Use arrow keys or click to advance slides.*
-- **Slides (Google Slides version):** [View on Google Slides](https://docs.google.com/presentation/d/1x8mnnAsHXP4QjVIb4MJI_wgi7RvkU5idcWsvum42Cek/edit?usp=sharing)
-  - *Navigation: Use arrow keys or click to advance slides.*
-
-### "Major League Markov Chains" (in progress)
-
-A second talk presenting the research findings and visualizations from this project, including the transition heatmap and analysis of never-played sequences. Source file is in this repository; a compiled version has not yet been produced.
-
-- **Source:** `Major League Markov Chains.Rmd` (in this repository)
+- [Recruitment Talk](https://baseball.seancarver.org/novelty.html) — recruitment presentation for the project and its underlying ideas.
+- [Unprecedented Half Innings and Other Insights from Markov Chains](https://docs.google.com/presentation/d/1x8mnnAsHXP4QjVIb4MJI_wgi7RvkU5idcWsvum42Cek/edit?slide=id.gc6f980f91_0_0#slide=id.gc6f980f91_0_0) — presentation of the full set of project results.
 
 ---
 
@@ -74,9 +62,3 @@ bbanalysis/
 ## Data
 
 Baseball play-by-play data is sourced from [Retrosheet](https://www.retrosheet.org), which provides freely available play-by-play records for all MLB seasons. The data is loaded into a local MySQL database (`retroplays`) for analysis.
-
----
-
-## Related Work
-
-The statistical methodology underlying the novelty detection draws on Kullback-Leibler divergence tools developed in the companion repository: [klir](https://github.com/seancarverphd/klir).
